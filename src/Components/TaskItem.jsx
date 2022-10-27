@@ -19,10 +19,10 @@ const StyledTask = styled.li`
 const StyledTaskText = styled.p`
     flex-grow: 1;
     text-align: start;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    /* white-space: nowrap;
+    text-overflow: ellipsis; */
     padding-right: 10px;
-    overflow: hidden;
+    /* overflow: hidden; */
     margin-left: 5px;
 `;
 const StyledButton = styled.button`
