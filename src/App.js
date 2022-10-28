@@ -1,7 +1,7 @@
 import Main from './Components/Main';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import { BrowserRouter, Routes, Route, json } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import AccountPage from './Components/AccountPage';
 // import PrivateRoute from './Components/PrivateRoute';
 import NotFoundPage from './Components/NotFoundPage';
@@ -147,7 +147,7 @@ function App() {
     ];
 
     return (
-        <BrowserRouter>
+        <HashRouter>
             <StyledApp from={colorsTheme.from} to={colorsTheme.to}>
                 <Routes>
                     <Route
@@ -177,7 +177,7 @@ function App() {
                     {/* <Route path='/login' element={<Login />} /> */}
                 </Routes>
             </StyledApp>
-        </BrowserRouter>
+        </HashRouter>
     );
 }
 
