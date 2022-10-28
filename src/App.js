@@ -1,7 +1,7 @@
 import Main from './Components/Main';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import AccountPage from './Components/AccountPage';
 // import PrivateRoute from './Components/PrivateRoute';
 import NotFoundPage from './Components/NotFoundPage';
@@ -147,37 +147,35 @@ function App() {
     ];
 
     return (
-        <HashRouter>
-            <StyledApp from={colorsTheme.from} to={colorsTheme.to}>
-                <Routes>
-                    <Route
-                        path='/'
-                        element={
-                            <Main
-                                monthNames={monthNames}
-                                date={date}
-                                weekDays={weekDays}
-                                setDate={setDate}
-                                updateLocalStorageDB={updateLocalStorageDB}
-                                loadLocalStorageDB={loadLocalStorageDB}
-                            />
-                        }
-                    />
-                    <Route
-                        path='/account'
-                        element={
-                            <AccountPage
-                                setColorsTheme={setColorsTheme}
-                                colorsTheme={colorsTheme}
-                                generateColor={generateColor}
-                            />
-                        }
-                    />
-                    <Route path='*' element={<NotFoundPage />} />
-                    {/* <Route path='/login' element={<Login />} /> */}
-                </Routes>
-            </StyledApp>
-        </HashRouter>
+        <StyledApp from={colorsTheme.from} to={colorsTheme.to}>
+            <Routes>
+                <Route
+                    path='/'
+                    element={
+                        <Main
+                            monthNames={monthNames}
+                            date={date}
+                            weekDays={weekDays}
+                            setDate={setDate}
+                            updateLocalStorageDB={updateLocalStorageDB}
+                            loadLocalStorageDB={loadLocalStorageDB}
+                        />
+                    }
+                />
+                <Route
+                    path='/account'
+                    element={
+                        <AccountPage
+                            setColorsTheme={setColorsTheme}
+                            colorsTheme={colorsTheme}
+                            generateColor={generateColor}
+                        />
+                    }
+                />
+                <Route path='*' element={<NotFoundPage />} />
+                {/* <Route path='/login' element={<Login />} /> */}
+            </Routes>
+        </StyledApp>
     );
 }
 

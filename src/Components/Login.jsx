@@ -2,6 +2,11 @@ import styled from 'styled-components/macro';
 import React, { useState } from 'react';
 import { RiLoginCircleFill } from 'react-icons/ri';
 
+const StyledLoginWrapper = styled.div`
+    position: relative;
+    padding: 20px;
+    overflow: hidden;
+`;
 const StyledTitle = styled.p`
     width: 100%;
     text-align: center;
@@ -45,6 +50,21 @@ const StyledButton = styled.button`
         background-color: rgba(255, 255, 255, 0.2);
     }
 `;
+const StyledIsdev = styled.div`
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: ${(props) => (props.isDev ? '100%' : '0px')};
+    height: ${(props) => (props.isDev ? '100%' : '0px')};
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(${(props) => (props.isDev ? '3px' : '0px')});
+`;
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(true);
@@ -73,7 +93,7 @@ const Login = () => {
     };
 
     return (
-        <>
+        <StyledLoginWrapper>
             <StyledTitle>Форма для входа</StyledTitle>
             <StyledInput
                 type='text'
@@ -110,7 +130,10 @@ const Login = () => {
                     />
                 </StyledButton>
             </StyledSendBlock>
-        </>
+            <StyledIsdev isDev>
+                <p>Скоро появится</p>
+            </StyledIsdev>
+        </StyledLoginWrapper>
     );
 };
 export default Login;

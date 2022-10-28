@@ -7,7 +7,7 @@ import { FaSave } from 'react-icons/fa';
 import { FaRandom } from 'react-icons/fa';
 import LoginPage from './Login';
 
-const StyledLoginPage = styled.div`
+const StyledAccountPage = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -48,7 +48,7 @@ const StyledBlockWrapper = styled.div`
     width: 20%;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
-    padding: 10px;
+    overflow: hidden;
     &:last-child {
         width: 100%;
     }
@@ -102,7 +102,7 @@ const AccountPage = ({ setColorsTheme, colorsTheme, generateColor }) => {
     };
 
     return (
-        <StyledLoginPage>
+        <StyledAccountPage>
             <StyledHeader>
                 <StyledButton disabled>
                     <Link to='/'>
@@ -168,7 +168,7 @@ const AccountPage = ({ setColorsTheme, colorsTheme, generateColor }) => {
                     </StyledDescription>
                 </StyledBlockWrapper>
             </StyledMain>
-        </StyledLoginPage>
+        </StyledAccountPage>
     );
 };
 export default AccountPage;
