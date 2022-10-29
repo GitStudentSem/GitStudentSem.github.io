@@ -1,7 +1,7 @@
 * {
     box-sizing: border-box;
     color: rgba(255, 255, 255);
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: "Nunito Sans", sans-serif;
 }
 *::-webkit-scrollbar {
     width: 6px; /* ширина scrollbar */
@@ -29,4 +29,9 @@ button {
     background-color: transparent;
     border: none;
     outline: none;
+}
+ul,
+li {
+    margin: 0;
+    padding: 0;
 }

@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components/macro';
-import { AiFillStar } from 'react-icons/ai';
+import React from "react";
+import styled from "styled-components/macro";
+import { AiFillStar } from "react-icons/ai";
 
 const StyledButton = styled.button`
     display: flex;
@@ -25,12 +25,13 @@ const Star = ({ setValue, value }) => {
         <StyledButton
             onClick={(e) => {
                 e.preventDefault();
-                setValue(!value);
+                setValue();
             }}
+            type='button'
         >
             <AiFillStar
                 size={20}
-                fill={value ? 'rgb(255, 255, 255)' : 'rgba(255, 255, 255, 0.6)'}
+                fill={value ? "rgb(255, 255, 255)" : "rgba(255, 255, 255, 0.6)"}
             />
         </StyledButton>
     );

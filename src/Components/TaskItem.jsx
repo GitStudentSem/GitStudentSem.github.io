@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
-import { AiFillDelete, AiFillStar } from 'react-icons/ai';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components/macro";
+import { AiFillDelete, AiFillStar } from "react-icons/ai";
 
 const StyledTask = styled.li`
     display: flex;
@@ -22,7 +21,7 @@ const StyledTaskText = styled.p`
     /* white-space: nowrap;
     text-overflow: ellipsis; */
     padding-right: 10px;
-    /* overflow: hidden; */
+    overflow-x: hidden;
     margin-left: 5px;
 `;
 const StyledButton = styled.button`
@@ -46,113 +45,61 @@ const StyledButton = styled.button`
 
 const TaskItem = ({
     taskItem,
-    index,
     transformDateToString,
-    setTaskOnDay,
-    date,
-    updateLocalStorageDB,
-    loadLocalStorageDB,
+    index,
+    tasksOnDay,
+    setTasksOnDay,
 }) => {
-    const [isImportant, setIsImportant] = useState();
+    const [isImportant, setIsImportant] = useState(taskItem.isImportant);
 
-    const updateIsImpartant = (index) => {
-        let currentDBInStorage = loadLocalStorageDB();
-        for (let i = 0; i < currentDBInStorage.length; i++) {
-            let copyTasksInfo = currentDBInStorage[i];
+    const changeIsImportant = () => {
+        let changedArray = tasksOnDay;
+        changedArray[index].isImportant = isImportant;
 
-            if (
-                transformDateToString(copyTasksInfo.date) ===
-                transformDateToString(date)
-            ) {
-                for (
-                    let indexTaskInDB = 0;
-                    indexTaskInDB < copyTasksInfo.tasksOnDay.length;
-                    indexTaskInDB++
-                ) {
-                    let taskOnDay = copyTasksInfo.tasksOnDay[indexTaskInDB];
-
-                    if (!taskOnDay) return;
-
-                    if (!index && index !== 0) {
-                        setIsImportant(taskOnDay.isImportant);
-                        updateLocalStorageDB(currentDBInStorage);
-                    } else if (indexTaskInDB === index) {
-                        taskOnDay.isImportant =
-                            !copyTasksInfo?.tasksOnDay[indexTaskInDB]
-                                ?.isImportant;
-
-                        setIsImportant(
-                            copyTasksInfo.tasksOnDay[index].isImportant
-                        );
-                        updateLocalStorageDB(currentDBInStorage);
-                    } else if (indexTaskInDB !== index) {
-                        taskOnDay.isImportant =
-                            copyTasksInfo?.tasksOnDay[
-                                indexTaskInDB
-                            ]?.isImportant;
-                        setIsImportant(
-                            copyTasksInfo.tasksOnDay[index].isImportant
-                        );
-                        updateLocalStorageDB(currentDBInStorage);
-                    }
-                }
-
-                // setIsImportant(copyTasksInfo.tasksOnDay[index].isImportant);
-            }
-        }
-        // updateLocalStorageDB(currentDBInStorage);
+        localStorage.setItem(
+            transformDateToString(),
+            JSON.stringify(changedArray)
+        );
     };
 
     useEffect(() => {
-        updateIsImpartant();
-    }, [date]);
+        changeIsImportant();
+    }, [isImportant]);
 
-    const deleteTasksFromStorage = (index) => {
-        const currentDBInStorage = loadLocalStorageDB();
-
-        for (let i = 0; i < currentDBInStorage.length; i++) {
-            let copyTasksOnDay = currentDBInStorage[i];
-            if (
-                transformDateToString(copyTasksOnDay.date) ===
-                transformDateToString(date)
-            ) {
-                let changedTasks = copyTasksOnDay.tasksOnDay;
-                changedTasks.splice(index, 1);
-                copyTasksOnDay = {
-                    date,
-                    tasksOnDay: changedTasks,
-                };
-
-                updateLocalStorageDB(currentDBInStorage);
-                setTaskOnDay({
-                    date,
-                    tasksOnDay: copyTasksOnDay,
-                });
-            }
-        }
+    let copyTasks = Object.assign([], tasksOnDay);
+    const deleteTask = () => {
+        copyTasks.splice(index, 1);
+        localStorage.setItem(
+            transformDateToString(),
+            JSON.stringify(copyTasks)
+        );
+        console.log("tasksOnDay", copyTasks);
+        setTasksOnDay(copyTasks);
     };
 
     return (
         <StyledTask>
             <StyledButton
-                onClick={() => {
-                    updateIsImpartant(index);
+                onClick={(e) => {
+                    e.preventDefault();
+                    setIsImportant(!isImportant);
                 }}
             >
                 <AiFillStar
                     size={20}
                     fill={
                         isImportant
-                            ? 'rgb(255, 255, 255)'
-                            : 'rgba(255, 255, 255, 0.6)'
+                            ? "rgb(255, 255, 255)"
+                            : "rgba(255, 255, 255, 0.6)"
                     }
                 />
             </StyledButton>
 
             <StyledTaskText>{taskItem.text}</StyledTaskText>
+
             <StyledButton
                 onClick={() => {
-                    deleteTasksFromStorage(index);
+                    deleteTask();
                 }}
             >
                 <AiFillDelete size={20} fill='rgba(255, 255, 255, 0.8)' />

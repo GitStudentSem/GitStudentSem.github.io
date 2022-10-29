@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
-import { AiFillCheckCircle } from 'react-icons/ai';
-import Star from './Star';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components/macro";
+import { AiFillCheckCircle } from "react-icons/ai";
+import Star from "./Star";
 
 const StyledForm = styled.form`
     display: flex;
@@ -36,9 +36,57 @@ const StyledButton = styled.button`
     }
 `;
 
-const CreateTasksForm = ({ addTaskInStorage }) => {
-    const [text, setText] = useState('');
+const CreateTasksForm = ({
+    transformDateToString,
+    date,
+    tasksOnDay,
+    setTasksOnDay,
+}) => {
+    const [text, setText] = useState("");
     const [isImportant, setIsImportant] = useState(false);
+
+    const changeIsImportant = () => {
+        setIsImportant(!isImportant);
+        localStorage.setItem(
+            `isImportant-${transformDateToString()}`,
+            JSON.stringify(!isImportant)
+        );
+    };
+
+    useEffect(() => {
+        let isImportantInStorage = localStorage.getItem(
+            `isImportant-${transformDateToString()}`
+        );
+        if (!isImportantInStorage || isImportantInStorage === "false") {
+            return;
+        } else {
+            setIsImportant(true);
+            localStorage.setItem(
+                `isImportant-${transformDateToString()}`,
+                JSON.stringify(true)
+            );
+        }
+    }, [date, transformDateToString]);
+
+    const changeText = (value) => {
+        setText(value);
+        localStorage.setItem(
+            `text-${transformDateToString()}`,
+            JSON.stringify(value)
+        );
+    };
+
+    useEffect(() => {
+        let textInLocalStorage = localStorage.getItem(
+            `text-${transformDateToString()}`
+        );
+
+        if (!textInLocalStorage) {
+            return;
+        } else {
+            setText(JSON.parse(textInLocalStorage));
+        }
+    }, []);
 
     return (
         <StyledForm>
@@ -46,28 +94,37 @@ const CreateTasksForm = ({ addTaskInStorage }) => {
                 type='text'
                 value={text}
                 onChange={(e) => {
-                    setText(e.target.value);
+                    changeText(e.target.value);
                 }}
                 placeholder='Какие планы?'
             />
-            <Star setValue={setIsImportant} value={isImportant} />
+            <Star setValue={changeIsImportant} value={isImportant} />
 
             <StyledButton
                 onClick={(e) => {
                     e.preventDefault();
-                    addTaskInStorage({ text, isImportant });
 
-                    setText('');
+                    setTasksOnDay((prevState) => [
+                        ...prevState,
+                        { text, isImportant },
+                    ]);
+
+                    localStorage.setItem(
+                        transformDateToString(),
+                        JSON.stringify(tasksOnDay)
+                    );
+                    changeText("");
                     setIsImportant(false);
                 }}
                 disabled={!text}
+                type='submit'
             >
                 <AiFillCheckCircle
                     size={20}
                     fill={
                         text
-                            ? 'rgba(255, 255, 255)'
-                            : 'rgba(255, 255, 255, 0.6)'
+                            ? "rgba(255, 255, 255)"
+                            : "rgba(255, 255, 255, 0.6)"
                     }
                 />
             </StyledButton>

@@ -1,11 +1,12 @@
-import styled from 'styled-components/macro';
-import React, { useState } from 'react';
-import { RiLoginCircleFill } from 'react-icons/ri';
+import styled from "styled-components/macro";
+import React, { useState } from "react";
+import { RiLoginCircleFill } from "react-icons/ri";
 
 const StyledLoginWrapper = styled.div`
     position: relative;
     padding: 20px;
     overflow: hidden;
+    height: 100%;
 `;
 const StyledTitle = styled.p`
     width: 100%;
@@ -59,17 +60,17 @@ const StyledIsdev = styled.div`
     position: absolute;
     left: 0;
     top: 0;
-    width: ${(props) => (props.isDev ? '100%' : '0px')};
-    height: ${(props) => (props.isDev ? '100%' : '0px')};
+    width: ${(props) => (props.isDev ? "100%" : "0px")};
+    height: ${(props) => (props.isDev ? "100%" : "0px")};
     background-color: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(${(props) => (props.isDev ? '3px' : '0px')});
+    backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
 `;
 
 const Login = () => {
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState("");
     const [isValidEmail, setIsValidEmail] = useState(true);
 
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState("");
     const [isValidPassword, setIsValidPassword] = useState(true);
 
     const validateEmail = () => {
@@ -120,8 +121,8 @@ const Login = () => {
             <StyledSendBlock>
                 <StyledStatus>
                     {isValidEmail && isValidPassword
-                        ? ''
-                        : 'В данных есть ошибка'}
+                        ? ""
+                        : "В данных есть ошибка"}
                 </StyledStatus>
                 <StyledButton>
                     <RiLoginCircleFill

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
+import React from "react";
+import styled from "styled-components/macro";
 
 const StyledHeader = styled.div`
     display: flex;
@@ -20,7 +20,7 @@ const StyledHeaderDayOfWeek = styled(StyledHeaderDay)`
 const DayHeader = ({ date, monthNames, weekDays }) => {
     return (
         <StyledHeader>
-            {date ? (
+            {date !== "other" ? (
                 <>
                     <StyledHeaderDay>
                         {monthNames[date.getMonth()]} {date.getDate()}
