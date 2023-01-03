@@ -1,13 +1,15 @@
 import Main from "./Components/Main";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { Routes, Route } from "react-router-dom";
-import AccountPage from "./Components/AccountPage";
+import AccountPage from "./Components/AccountPage/AccountPage";
 // import PrivateRoute from './Components/PrivateRoute';
 import NotFoundPage from "./Components/NotFoundPage";
-
+import { checkSizeLocalStorage } from "./scripts/localStorageWorker";
+import { generateColor } from "./scripts/generateColor";
 const StyledApp = styled.div`
-    background: #fff;
+    display: flex;
+    justify-content: center;
     padding: 5px;
     height: 100vh;
     background: radial-gradient(
@@ -20,39 +22,11 @@ const StyledApp = styled.div`
 function App() {
     const [date, setDate] = useState(new Date());
 
-    const generateColor = () => {
-        // setTheArray((oldArray) => [...oldArray, newElement]);
-        const getRandomColor = () => {
-            let letters = "0123456789ABCD";
-            let color = "#";
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * letters.length)];
-            }
-            return color;
-        };
-
-        return {
-            from: getRandomColor(),
-            to: getRandomColor(),
-        };
-    };
-
     const [colorsTheme, setColorsTheme] = useState(
-        localStorage.getItem("colorsTheme") &&
-            localStorage.getItem("colorsTheme").length > 0
+        localStorage.getItem("colorsTheme")
             ? JSON.parse(localStorage.getItem("colorsTheme"))
             : generateColor()
     );
-
-    let weekDays = [
-        "Воскресенье",
-        "Понедельник",
-        "Вторник",
-        "Среда",
-        "Четверг",
-        "Пятница",
-        "Суббота",
-    ];
 
     let monthNames = [
         "Январь",
@@ -68,7 +42,9 @@ function App() {
         "Ноябрь",
         "Декабрь",
     ];
-
+    useEffect(() => {
+        checkSizeLocalStorage();
+    }, []);
     return (
         <StyledApp from={colorsTheme.from} to={colorsTheme.to}>
             <Routes>
@@ -78,7 +54,6 @@ function App() {
                         <Main
                             monthNames={monthNames}
                             date={date}
-                            weekDays={weekDays}
                             setDate={setDate}
                         />
                     }
@@ -89,7 +64,6 @@ function App() {
                         <AccountPage
                             setColorsTheme={setColorsTheme}
                             colorsTheme={colorsTheme}
-                            generateColor={generateColor}
                         />
                     }
                 />

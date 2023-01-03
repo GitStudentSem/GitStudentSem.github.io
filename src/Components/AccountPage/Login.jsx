@@ -1,18 +1,19 @@
 import styled from "styled-components/macro";
 import React, { useState } from "react";
 import { RiLoginCircleFill } from "react-icons/ri";
+import Title from "./Title";
+import { screenSize } from "../../scripts/screens";
 
 const StyledLoginWrapper = styled.div`
     position: relative;
     padding: 20px;
     overflow: hidden;
-    height: 100%;
-`;
-const StyledTitle = styled.p`
-    width: 100%;
-    text-align: center;
-    margin-bottom: 10px;
-    font-size: 20px;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
 `;
 const StyledInput = styled.input`
     outline: none;
@@ -58,6 +59,7 @@ const StyledIsdev = styled.div`
     justify-content: center;
     font-size: 20px;
     position: absolute;
+    text-align: center;
     left: 0;
     top: 0;
     width: ${(props) => (props.isDev ? "100%" : "0px")};
@@ -95,7 +97,7 @@ const Login = () => {
 
     return (
         <StyledLoginWrapper>
-            <StyledTitle>Форма для входа</StyledTitle>
+            <Title>Форма для входа</Title>
             <StyledInput
                 type='text'
                 value={email}

@@ -4,12 +4,11 @@ import TaskItem from "./TaskItem";
 
 const StyledTasksList = styled.ul`
     list-style-type: none;
-    padding: 0 5px 0 0;
     height: calc(100% - 75px); // Высота зависит от шапки
     overflow-y: auto;
 `;
 
-const TasksList = ({ transformDateToString, tasksOnDay, setTasksOnDay }) => {
+const TasksList = ({ tasksOnDay, setTasksOnDay }) => {
     return (
         <StyledTasksList>
             {tasksOnDay.map((taskItem, index) => {
@@ -17,7 +16,6 @@ const TasksList = ({ transformDateToString, tasksOnDay, setTasksOnDay }) => {
                     <TaskItem
                         key={taskItem.text + index}
                         taskItem={taskItem}
-                        transformDateToString={transformDateToString}
                         index={index}
                         tasksOnDay={tasksOnDay}
                         setTasksOnDay={setTasksOnDay}

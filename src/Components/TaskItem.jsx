@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { AiFillDelete, AiFillStar } from "react-icons/ai";
+import { transformDateToString } from "../scripts/transformDateToString";
 
 const StyledTask = styled.li`
     display: flex;
@@ -11,6 +12,7 @@ const StyledTask = styled.li`
     transition: 0.3s;
     border-radius: 10px;
     cursor: pointer;
+    margin-bottom: 5px;
     &:hover {
         background-color: rgba(255, 255, 255, 0.2);
     }
@@ -43,37 +45,17 @@ const StyledButton = styled.button`
     }
 `;
 
-const TaskItem = ({
-    taskItem,
-    transformDateToString,
-    index,
-    tasksOnDay,
-    setTasksOnDay,
-}) => {
-    const [isImportant, setIsImportant] = useState(taskItem.isImportant);
-
+const TaskItem = ({ taskItem, index, tasksOnDay, setTasksOnDay }) => {
     const changeIsImportant = () => {
-        let changedArray = tasksOnDay;
-        changedArray[index].isImportant = isImportant;
-
-        localStorage.setItem(
-            transformDateToString(),
-            JSON.stringify(changedArray)
-        );
+        const copyTasks = [...tasksOnDay];
+        copyTasks[index].isImportant = !copyTasks[index].isImportant;
+        setTasksOnDay(copyTasks);
     };
 
-    useEffect(() => {
-        changeIsImportant();
-    }, [isImportant]);
-
-    let copyTasks = Object.assign([], tasksOnDay);
     const deleteTask = () => {
+        const copyTasks = [...tasksOnDay];
         copyTasks.splice(index, 1);
-        localStorage.setItem(
-            transformDateToString(),
-            JSON.stringify(copyTasks)
-        );
-        console.log("tasksOnDay", copyTasks);
+
         setTasksOnDay(copyTasks);
     };
 
@@ -82,13 +64,13 @@ const TaskItem = ({
             <StyledButton
                 onClick={(e) => {
                     e.preventDefault();
-                    setIsImportant(!isImportant);
+                    changeIsImportant();
                 }}
             >
                 <AiFillStar
                     size={20}
                     fill={
-                        isImportant
+                        taskItem.isImportant
                             ? "rgb(255, 255, 255)"
                             : "rgba(255, 255, 255, 0.6)"
                     }

@@ -2,9 +2,17 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import { AiFillCheckCircle } from "react-icons/ai";
 import Star from "./Star";
+import { transformDateToString } from "../scripts/transformDateToString";
+import {
+    setStorageIsImportant,
+    setStorageInputText,
+    getStorageInputText,
+    getStorageIsImportant,
+} from "../scripts/localStorageWorker";
 
 const StyledForm = styled.form`
     display: flex;
+    margin-bottom: 5px;
 `;
 const StyledInput = styled.input`
     outline: none;
@@ -24,7 +32,6 @@ const StyledButton = styled.button`
     outline: none;
     border: none;
     background-color: transparent;
-    cursor: pointer;
     margin: 0;
     padding: 0;
     transition: all 0.3s;
@@ -36,57 +43,24 @@ const StyledButton = styled.button`
     }
 `;
 
-const CreateTasksForm = ({
-    transformDateToString,
-    date,
-    tasksOnDay,
-    setTasksOnDay,
-}) => {
+const CreateTasksForm = ({ date, addTask }) => {
     const [text, setText] = useState("");
     const [isImportant, setIsImportant] = useState(false);
 
+    useEffect(() => {
+        setText(getStorageInputText(date));
+        setIsImportant(getStorageIsImportant(date));
+    }, [date]);
+
     const changeIsImportant = () => {
         setIsImportant(!isImportant);
-        localStorage.setItem(
-            `isImportant-${transformDateToString()}`,
-            JSON.stringify(!isImportant)
-        );
+        setStorageIsImportant(!isImportant, date);
     };
-
-    useEffect(() => {
-        let isImportantInStorage = localStorage.getItem(
-            `isImportant-${transformDateToString()}`
-        );
-        if (!isImportantInStorage || isImportantInStorage === "false") {
-            return;
-        } else {
-            setIsImportant(true);
-            localStorage.setItem(
-                `isImportant-${transformDateToString()}`,
-                JSON.stringify(true)
-            );
-        }
-    }, [date, transformDateToString]);
 
     const changeText = (value) => {
         setText(value);
-        localStorage.setItem(
-            `text-${transformDateToString()}`,
-            JSON.stringify(value)
-        );
+        setStorageInputText(value, date);
     };
-
-    useEffect(() => {
-        let textInLocalStorage = localStorage.getItem(
-            `text-${transformDateToString()}`
-        );
-
-        if (!textInLocalStorage) {
-            return;
-        } else {
-            setText(JSON.parse(textInLocalStorage));
-        }
-    }, []);
 
     return (
         <StyledForm>
@@ -104,19 +78,12 @@ const CreateTasksForm = ({
                 onClick={(e) => {
                     e.preventDefault();
 
-                    setTasksOnDay((prevState) => [
-                        ...prevState,
-                        { text, isImportant },
-                    ]);
+                    addTask({ text, isImportant });
 
-                    localStorage.setItem(
-                        transformDateToString(),
-                        JSON.stringify(tasksOnDay)
-                    );
                     changeText("");
                     setIsImportant(false);
                 }}
-                disabled={!text}
+                disabled={text.length === 0}
                 type='submit'
             >
                 <AiFillCheckCircle

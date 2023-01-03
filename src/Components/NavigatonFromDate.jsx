@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components/macro';
+import React from "react";
+import styled from "styled-components/macro";
 
-import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
+import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -10,7 +10,7 @@ const StyledWrapper = styled.div`
     font-size: 20px;
     font-weight: 900;
     color: black;
-    width: 205px;
+    width: 150px;
 `;
 
 const StyledButton = styled.button`

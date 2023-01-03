@@ -1,47 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
+import MonthScreen from "./MonthScreen";
 import Navbar from "./Navbar";
-import Day from "./Day";
-
+import WeekScreen from "./WeekScreen";
+import { screenSize } from "../scripts/screens";
 const StyledWrapper = styled.div`
     height: calc(100% - 55px); // 45px - это высота шапки margin + padding
-`;
-const StyledMain = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: stretch;
-    height: 100%;
+    max-width: 1500px;
+    width: 100%;
+    @media (max-width: ${screenSize.tablet}px) {
+        height: calc(100% - 85px);
+    }
 `;
 
-const Main = ({ date, monthNames, weekDays, setDate }) => {
+const Main = ({ date, monthNames, setDate }) => {
+    const [isMonth, setIsMonth] = useState(true);
+
     return (
         <StyledWrapper>
-            <Navbar monthNames={monthNames} date={date} setDate={setDate} />
-            <StyledMain>
-                {weekDays.map((day, index) => (
-                    <Day
-                        key={
-                            new Date(
-                                date.getFullYear(),
-                                date.getMonth(),
-                                date.getDate() + index
-                            )
-                        }
-                        monthNames={monthNames}
-                        date={
-                            new Date(
-                                date.getFullYear(),
-                                date.getMonth(),
-                                date.getDate() + index
-                            )
-                        }
-                        weekDays={weekDays}
-                    />
-                ))}
-
-                <Day date='other' />
-            </StyledMain>
+            <Navbar
+                monthNames={monthNames}
+                date={date}
+                setDate={setDate}
+                setIsMonth={setIsMonth}
+                isMonth={isMonth}
+            />
+            {isMonth ? (
+                <MonthScreen
+                    date={date}
+                    setIsMonth={setIsMonth}
+                    setDate={setDate}
+                />
+            ) : (
+                <WeekScreen date={date} monthNames={monthNames} />
+            )}
         </StyledWrapper>
     );
 };
