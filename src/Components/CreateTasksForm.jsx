@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import { AiFillCheckCircle } from "react-icons/ai";
 import Star from "./Star";
-import { transformDateToString } from "../scripts/transformDateToString";
 import {
-    setStorageIsImportant,
     setStorageInputText,
     getStorageInputText,
+} from "../scripts/storageWorker/textInput";
+import {
+    setStorageIsImportant,
     getStorageIsImportant,
-} from "../scripts/localStorageWorker";
+} from "../scripts/storageWorker/isImportantInput";
 
 const StyledForm = styled.form`
     display: flex;

@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components/macro";
 import { AiFillDelete, AiFillStar } from "react-icons/ai";
-import { transformDateToString } from "../scripts/transformDateToString";
 
 const StyledTask = styled.li`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 5px;
-    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 98%;
     transition: 0.3s;
     border-radius: 10px;
     cursor: pointer;
@@ -16,12 +16,13 @@ const StyledTask = styled.li`
     &:hover {
         background-color: rgba(255, 255, 255, 0.2);
     }
+    &:last-child {
+        margin-bottom: 0;
+    }
 `;
 const StyledTaskText = styled.p`
     flex-grow: 1;
     text-align: start;
-    /* white-space: nowrap;
-    text-overflow: ellipsis; */
     padding-right: 10px;
     overflow-x: hidden;
     margin-left: 5px;

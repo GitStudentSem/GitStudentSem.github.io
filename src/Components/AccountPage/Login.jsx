@@ -2,7 +2,6 @@ import styled from "styled-components/macro";
 import React, { useState } from "react";
 import { RiLoginCircleFill } from "react-icons/ri";
 import Title from "./Title";
-import { screenSize } from "../../scripts/screens";
 
 const StyledLoginWrapper = styled.div`
     position: relative;

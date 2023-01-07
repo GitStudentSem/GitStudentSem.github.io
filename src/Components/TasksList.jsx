@@ -4,7 +4,7 @@ import TaskItem from "./TaskItem";
 
 const StyledTasksList = styled.ul`
     list-style-type: none;
-    height: calc(100% - 75px); // Высота зависит от шапки
+    height: calc(100% - 60px); // Высота зависит от шапки
     overflow-y: auto;
 `;
 

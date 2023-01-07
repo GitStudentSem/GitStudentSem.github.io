@@ -20,7 +20,7 @@ const StyledWrapper = styled.div`
     }
 `;
 
-const WeekScreen = ({ date, monthNames }) => {
+const WeekScreen = ({ date, monthNames, tasksFromBD }) => {
     let weekDays = [
         "Воскресенье",
         "Понедельник",
@@ -31,23 +31,24 @@ const WeekScreen = ({ date, monthNames }) => {
         "Суббота",
     ];
     // choose the screen size
-    const [elementsCount, setElementsCount] = useState(weekDays.length);
+    const [elementsCount, setElementsCount] = useState(handleResize());
     // choose the screen size
-    const handleResize = () => {
+    function handleResize() {
         if (window.innerWidth <= screenSize.tablet) {
-            return setElementsCount(1);
+            return 1;
         } else if (window.innerWidth <= screenSize.tabletLg) {
-            return setElementsCount(3);
+            return 3;
         } else if (window.innerWidth <= screenSize.widescreen) {
-            return setElementsCount(5);
+            return 5;
         } else {
-            setElementsCount(7);
+            return 7;
         }
-    };
+    }
 
     useEffect(() => {
-        handleResize();
-        window.addEventListener("resize", handleResize);
+        window.addEventListener("resize", () =>
+            setElementsCount(handleResize())
+        );
     }, []);
     return (
         <StyledWrapper>
@@ -69,10 +70,11 @@ const WeekScreen = ({ date, monthNames }) => {
                         )
                     }
                     weekDays={weekDays}
+                    tasksFromBD={tasksFromBD}
                 />
             ))}
 
-            <Day date='other' />
+            <Day date='other' tasksFromBD={tasksFromBD} />
         </StyledWrapper>
     );
 };

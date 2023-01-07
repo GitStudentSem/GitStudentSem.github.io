@@ -50,12 +50,19 @@ const Versions = () => {
         <div style={{ overflow: "hidden", borderRadius: "10px" }}>
             <StyledVersions>
                 <Title>История версий</Title>
+                <StyledVersionNumber>0.2.2</StyledVersionNumber>
+                <StyledVersionText>
+                    Оптимизация работы приложения
+                </StyledVersionText>
+                <StyledVersionText>
+                    Исправлена опечатка в истории версий
+                </StyledVersionText>
+                <StyledVersionText>
+                    Исправлены визуальные ошибки
+                </StyledVersionText>
                 <StyledVersionNumber>0.2.1</StyledVersionNumber>
                 <StyledVersionText>
                     Настроена мобильная версия
-                </StyledVersionText>
-                <StyledVersionText>
-                    Добавлен режим отображения по месяцам
                 </StyledVersionText>
                 <StyledVersionText>
                     Добавлен режим отображения по месяцам

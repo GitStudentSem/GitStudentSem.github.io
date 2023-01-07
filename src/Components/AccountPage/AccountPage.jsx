@@ -17,6 +17,7 @@ const StyledAccountPage = styled.div`
 const StyledHeader = styled.div`
     display: flex;
     justify-content: center;
+    margin-bottom: 10px;
 `;
 const StyledMain = styled.div`
     width: 100%;
@@ -24,7 +25,7 @@ const StyledMain = styled.div`
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 5px;
-    height: calc(100% - 45px); // с вычетом высоты шапки
+    height: calc(100% - 55px); // с вычетом высоты шапки
 `;
 const StyledButton = styled.button`
     display: flex;

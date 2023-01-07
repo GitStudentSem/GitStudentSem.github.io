@@ -2,7 +2,7 @@ import React from "react";
 import { FaRegCalendar } from "react-icons/fa";
 import { MdOutlineWorkOutline } from "react-icons/md";
 import styled from "styled-components/macro";
-import { getStorageTasksList } from "../scripts/localStorageWorker";
+import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 
 const StyledDay = styled.button`
@@ -45,7 +45,6 @@ const IconWrapper = styled.div`
 
 const DayMonth = ({ date, startColumn, setIsMonth, setDate }) => {
     const tasksOnDay = getStorageTasksList(date);
-    console.log(date);
     return (
         <StyledDay
             startColumn={startColumn}

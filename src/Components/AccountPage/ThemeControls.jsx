@@ -1,5 +1,5 @@
 import styled from "styled-components/macro";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaSave } from "react-icons/fa";
 import { FaRandom } from "react-icons/fa";
 import { generateColor } from "../../scripts/generateColor";
@@ -102,33 +102,17 @@ const StyledIsdev = styled.div`
 `;
 
 const ThemeControls = ({ setColorsTheme, colorsTheme }) => {
-    const [isNeedSaveColor, setIsNeedSaveColor] = useState();
-
-    useEffect(() => {
-        const savedColorsTheme = JSON.parse(
-            localStorage.getItem("colorsTheme")
-        );
-
-        const savedIsNeedSaveColor = JSON.parse(
-            localStorage.getItem("isNeedSaveColor")
-        );
-
-        setIsNeedSaveColor(savedIsNeedSaveColor);
-
-        if (!savedColorsTheme) return;
-
-        setColorsTheme(savedColorsTheme);
-    }, []);
+    const [isNeedSaveColor, setIsNeedSaveColor] = useState(
+        !!JSON.parse(localStorage.getItem("colorsTheme"))
+    );
 
     const saveColor = () => {
         localStorage.setItem("colorsTheme", JSON.stringify(colorsTheme));
         setIsNeedSaveColor(true);
-        localStorage.setItem("isNeedSaveColor", JSON.stringify(true));
     };
 
     const randomColor = () => {
         setIsNeedSaveColor(false);
-        localStorage.setItem("isNeedSaveColor", JSON.stringify(false));
 
         localStorage.removeItem("colorsTheme");
         setColorsTheme(generateColor());

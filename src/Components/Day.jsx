@@ -6,7 +6,7 @@ import DayHeader from "./DayHeader";
 import {
     getStorageTasksList,
     setStorageTasksList,
-} from "../scripts/localStorageWorker";
+} from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 
 const StyledDay = styled.div`
@@ -22,7 +22,7 @@ const StyledDay = styled.div`
     overflow: hidden;
 `;
 
-const Day = ({ date, monthNames, weekDays, isDev }) => {
+const Day = ({ date, monthNames, weekDays, isDev, tasksFromBD }) => {
     const [tasksOnDay, setTasksOnDay] = useState(getStorageTasksList(date));
 
     const addTask = (task) => {
@@ -31,13 +31,27 @@ const Day = ({ date, monthNames, weekDays, isDev }) => {
             return [...prev, task];
         });
     };
-    useEffect(() => {
-        setTasksOnDay(getStorageTasksList(date));
-    }, [date]);
 
     useEffect(() => {
+        setTasksOnDay(getStorageTasksList(date));
+
+        // if (tasksFromBD.length) {
+        //     let currentTasks = tasksFromBD.find((task) => {
+        //         return (
+        //             transformDateToString(task.date) ===
+        //             transformDateToString(date)
+        //         );
+        //     });
+        //     if (currentTasks) {
+        //         setTasksOnDay(currentTasks.tasks);
+        //     }
+        // }
+    }, [date]);
+
+    // при каждом обновлении задач будет происходить запись в localStorage
+    useEffect(() => {
         setStorageTasksList(tasksOnDay, date);
-    }, [date, tasksOnDay]);
+    }, [tasksOnDay, date]);
 
     return (
         <StyledDay

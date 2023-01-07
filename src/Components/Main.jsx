@@ -16,6 +16,23 @@ const StyledWrapper = styled.div`
 const Main = ({ date, monthNames, setDate }) => {
     const [isMonth, setIsMonth] = useState(true);
 
+    const tasksFromBD = [
+        // {
+        //     date: new Date(),
+        //     tasks: [{ text: "запросил из базы", isImportant: true }],
+        // },
+        // {
+        //     date: new Date(
+        //         new Date().getFullYear(),
+        //         new Date().getMonth(),
+        //         new Date().getDate() + 2
+        //     ),
+        //     tasks: [
+        //         { text: "запросил из базы через 2 дня", isImportant: true },
+        //     ],
+        // },
+    ];
+
     return (
         <StyledWrapper>
             <Navbar
@@ -32,7 +49,11 @@ const Main = ({ date, monthNames, setDate }) => {
                     setDate={setDate}
                 />
             ) : (
-                <WeekScreen date={date} monthNames={monthNames} />
+                <WeekScreen
+                    date={date}
+                    monthNames={monthNames}
+                    tasksFromBD={tasksFromBD}
+                />
             )}
         </StyledWrapper>
     );
