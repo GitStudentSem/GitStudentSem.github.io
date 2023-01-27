@@ -4,7 +4,7 @@ import { RiLoginCircleFill } from "react-icons/ri";
 import Title from "./Title";
 import axios from "../../axios";
 
-const StyledLoginWrapper = styled.form`
+const StyledRegisterWrapper = styled.form`
     width: 48%;
     height: 100%;
 `;
@@ -44,6 +44,21 @@ const StyledButton = styled.button`
         background-color: rgba(255, 255, 255, 0.2);
     }
 `;
+const StyledIsdev = styled.div`
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    position: absolute;
+    text-align: center;
+    left: 0;
+    top: 0;
+    width: ${(props) => (props.isDev ? "100%" : "0px")};
+    height: ${(props) => (props.isDev ? "100%" : "0px")};
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
+`;
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -51,6 +66,9 @@ const Login = () => {
 
     const [password, setPassword] = useState("");
     const [isValidPassword, setIsValidPassword] = useState(true);
+
+    const [fullName, setFullName] = useState("");
+    const [isValidFullName, setIsValidFullName] = useState(true);
 
     const validateEmail = () => {
         if (email.length > 0) {
@@ -66,6 +84,13 @@ const Login = () => {
         return setIsValidPassword(false);
     };
 
+    const validateFullName = () => {
+        if (password.length > 0) {
+            return setIsValidFullName(true);
+        }
+        return setIsValidFullName(false);
+    };
+
     const onChangeHandler = (e, setValue, validateValue) => {
         e.preventDefault();
         setValue(e.target.value);
@@ -74,6 +99,7 @@ const Login = () => {
 
     const handleSubmit = async () => {
         const { data } = await axios.post("/auth/register", {
+            fullName,
             email,
             password,
         });
@@ -81,13 +107,24 @@ const Login = () => {
     };
 
     return (
-        <StyledLoginWrapper
+        <StyledRegisterWrapper
             onSubmit={(e) => {
                 e.preventDefault();
                 console.log(handleSubmit());
             }}
         >
-            <Title>Войти</Title>
+            <Title>Регистрация</Title>
+            <StyledInput
+                type='text'
+                value={fullName}
+                onFocus={(e) => {
+                    onChangeHandler(e, setFullName, validateFullName);
+                }}
+                onChange={(e) => {
+                    onChangeHandler(e, setFullName, validateFullName);
+                }}
+                placeholder='Как к вам обращаться'
+            />
             <StyledInput
                 type='text'
                 value={email}
@@ -112,7 +149,7 @@ const Login = () => {
             />
             <StyledSendBlock>
                 <StyledStatus>
-                    {isValidEmail && isValidPassword
+                    {isValidEmail && isValidPassword && isValidFullName
                         ? ""
                         : "В данных есть ошибка"}
                 </StyledStatus>
@@ -123,7 +160,10 @@ const Login = () => {
                     />
                 </StyledButton>
             </StyledSendBlock>
-        </StyledLoginWrapper>
+            {/* <StyledIsdev isDev>
+                <p>Скоро появится</p>
+            </StyledIsdev> */}
+        </StyledRegisterWrapper>
     );
 };
 export default Login;
