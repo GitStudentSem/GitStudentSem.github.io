@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { RiLoginCircleFill } from "react-icons/ri";
 import Title from "./Title";
 import axios from "../../axios";
+import user from "../../store/user";
+import { observer } from "mobx-react-lite";
 
 const StyledRegisterWrapper = styled.form`
   width: 48%;
@@ -60,7 +62,7 @@ const StyledIsdev = styled.div`
   backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
 `;
 
-const Login = ({ setIsLoginForm, setIsRegisterForm, setName }) => {
+const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
 
@@ -104,7 +106,7 @@ const Login = ({ setIsLoginForm, setIsRegisterForm, setName }) => {
       password,
     });
     if ("token" in data) {
-      setName(data.fullName);
+      user.login(data.fullName);
     }
   };
 
@@ -112,7 +114,7 @@ const Login = ({ setIsLoginForm, setIsRegisterForm, setName }) => {
     <StyledRegisterWrapper
       onSubmit={(e) => {
         e.preventDefault();
-        console.log(handleSubmit());
+        handleSubmit();
       }}
     >
       <Title>Регистрация</Title>
@@ -172,5 +174,5 @@ const Login = ({ setIsLoginForm, setIsRegisterForm, setName }) => {
       </StyledButton>
     </StyledRegisterWrapper>
   );
-};
+});
 export default Login;

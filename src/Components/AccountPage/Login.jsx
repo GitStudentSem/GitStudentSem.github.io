@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { RiLoginCircleFill } from "react-icons/ri";
 import Title from "./Title";
 import axios from "../../axios";
+import user from "../../store/user";
+import { observer } from "mobx-react-lite";
 
 const StyledLoginWrapper = styled.form`
   width: 48%;
@@ -45,7 +47,7 @@ const StyledButton = styled.button`
   }
 `;
 
-const Login = ({ setIsLoginForm, setIsRegisterForm, setName }) => {
+const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
 
@@ -79,7 +81,7 @@ const Login = ({ setIsLoginForm, setIsRegisterForm, setName }) => {
     });
     if ("token" in data) {
       window.localStorage.setItem("token", data.token);
-      setName(data.fullName);
+      user.login(data.fullName);
     }
   };
 
@@ -131,5 +133,5 @@ const Login = ({ setIsLoginForm, setIsRegisterForm, setName }) => {
       </StyledButton>
     </StyledLoginWrapper>
   );
-};
+});
 export default Login;

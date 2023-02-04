@@ -9,6 +9,8 @@ import ThemeControls from "./ThemeControls";
 import ViewControl from "./ViewControl";
 import Login from "./Login";
 import { screenSize } from "../../scripts/screens";
+import user from "../../store/user";
+import { observer } from "mobx-react-lite";
 
 const StyledAccountPage = styled.div`
   width: 100%;
@@ -86,7 +88,7 @@ const StyledIsdev = styled.div`
   backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
 `;
 
-const AccountPage = ({ name, setName }) => {
+const AccountPage = observer(() => {
   //   const [name, setName] = useState("");
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [isRegisterForm, setIsRegisterForm] = useState(false);
@@ -101,7 +103,7 @@ const AccountPage = ({ name, setName }) => {
   };
   const logOut = () => {
     window.localStorage.removeItem("token");
-    setName("");
+    user.logout();
   };
 
   useEffect(() => {
@@ -121,9 +123,9 @@ const AccountPage = ({ name, setName }) => {
 
       <StyledMain>
         <StyledFormsWrapper>
-          {name ? (
+          {user.isAuth ? (
             <StyledHelloWrapper>
-              <StyledHelloBlock>привет, {name}</StyledHelloBlock>
+              <StyledHelloBlock>привет, {user.name}</StyledHelloBlock>
               <StyledButton onClick={logOut}>Выйти из аккаунта</StyledButton>
             </StyledHelloWrapper>
           ) : (
@@ -132,14 +134,12 @@ const AccountPage = ({ name, setName }) => {
                 <Register
                   setIsRegisterForm={setIsRegisterForm}
                   setIsLoginForm={setIsLoginForm}
-                  setName={setName}
                 />
               )}
               {isLoginForm && (
                 <Login
                   setIsRegisterForm={setIsRegisterForm}
                   setIsLoginForm={setIsLoginForm}
-                  setName={setName}
                 />
               )}
             </>
@@ -159,5 +159,5 @@ const AccountPage = ({ name, setName }) => {
       </StyledMain>
     </StyledAccountPage>
   );
-};
+});
 export default AccountPage;

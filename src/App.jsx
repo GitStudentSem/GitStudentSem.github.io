@@ -10,6 +10,7 @@ import axios from "./axios";
 import { observer } from "mobx-react-lite";
 import colorTheme from "./store/colorTheme";
 import { LSGetPalette } from "./scripts/storageWorker/LSPalette";
+import user from "./store/user";
 
 const StyledApp = styled.div`
   display: flex;
@@ -26,7 +27,6 @@ const StyledApp = styled.div`
 
 const App = observer(() => {
   const [date, setDate] = useState(new Date());
-  const [name, setName] = useState("");
 
   let monthNames = [
     "Январь",
@@ -51,7 +51,7 @@ const App = observer(() => {
     if (token) {
       const { data } = await axios.get("/auth/me");
 
-      setName(data.userData.fullName);
+      user.login(data.userData.fullName);
     }
   };
   useEffect(() => {
@@ -75,10 +75,7 @@ const App = observer(() => {
             <Main monthNames={monthNames} date={date} setDate={setDate} />
           }
         />
-        <Route
-          path='/account'
-          element={<AccountPage name={name} setName={setName} />}
-        />
+        <Route path='/account' element={<AccountPage />} />
         <Route path='*' element={<NotFoundPage />} />
         {/* <Route path='/login' element={<Login />} /> */}
       </Routes>
