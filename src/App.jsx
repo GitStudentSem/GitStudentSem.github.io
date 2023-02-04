@@ -6,8 +6,10 @@ import AccountPage from "./Components/AccountPage/AccountPage";
 // import PrivateRoute from './Components/PrivateRoute';
 import NotFoundPage from "./Components/NotFoundPage";
 import { checkSizeLocalStorage } from "./scripts/storageWorker/checkSizeLocalStorage";
-import { generateColor } from "./scripts/generateColor";
 import axios from "./axios";
+import { observer } from "mobx-react-lite";
+import colorTheme from "./store/colorTheme";
+import { LSGetPalette } from "./scripts/storageWorker/LSPalette";
 
 const StyledApp = styled.div`
   display: flex;
@@ -22,14 +24,9 @@ const StyledApp = styled.div`
   );
 `;
 
-function App() {
+const App = observer(() => {
   const [date, setDate] = useState(new Date());
   const [name, setName] = useState("");
-  const [colorsTheme, setColorsTheme] = useState(
-    localStorage.getItem("colorsTheme")
-      ? JSON.parse(localStorage.getItem("colorsTheme"))
-      : generateColor()
-  );
 
   let monthNames = [
     "Январь",
@@ -62,9 +59,15 @@ function App() {
     authMe();
     window.addEventListener("resize", handleResize);
     checkSizeLocalStorage();
+
+    colorTheme.setIsNeedSaveColor(!!LSGetPalette());
+    colorTheme.isNeedSaveColor
+      ? colorTheme.setPalette(LSGetPalette())
+      : colorTheme.generateColor();
   }, []);
+
   return (
-    <StyledApp from={colorsTheme.from} to={colorsTheme.to}>
+    <StyledApp from={colorTheme.palette.from} to={colorTheme.palette.to}>
       <Routes>
         <Route
           path='/'
@@ -74,20 +77,13 @@ function App() {
         />
         <Route
           path='/account'
-          element={
-            <AccountPage
-              setColorsTheme={setColorsTheme}
-              colorsTheme={colorsTheme}
-              name={name}
-              setName={setName}
-            />
-          }
+          element={<AccountPage name={name} setName={setName} />}
         />
         <Route path='*' element={<NotFoundPage />} />
         {/* <Route path='/login' element={<Login />} /> */}
       </Routes>
     </StyledApp>
   );
-}
+});
 
 export default App;

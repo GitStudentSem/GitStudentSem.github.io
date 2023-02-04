@@ -86,7 +86,7 @@ const StyledIsdev = styled.div`
   backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
 `;
 
-const AccountPage = ({ setColorsTheme, colorsTheme, name, setName }) => {
+const AccountPage = ({ name, setName }) => {
   //   const [name, setName] = useState("");
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [isRegisterForm, setIsRegisterForm] = useState(false);
@@ -149,10 +149,7 @@ const AccountPage = ({ setColorsTheme, colorsTheme, name, setName }) => {
                     </StyledIsdev> */}
         </StyledFormsWrapper>
 
-        <ThemeControls
-          colorsTheme={colorsTheme}
-          setColorsTheme={setColorsTheme}
-        />
+        <ThemeControls />
 
         <Versions />
 
