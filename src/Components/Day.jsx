@@ -38,6 +38,7 @@ const Day = observer(({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
         }
       });
       if (currentTasks) {
+        console.log(currentTasks.tasks);
         setTasksOnDay([...currentTasks.tasks]);
       }
     }

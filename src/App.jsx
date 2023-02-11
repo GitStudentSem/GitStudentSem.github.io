@@ -49,6 +49,7 @@ const App = observer(() => {
 
   const fetchData = async () => {
     const { data } = await axios.get("/tasks");
+    console.log(data);
     const selectedFields = [];
     data.forEach((day) => {
       const { calendarDate, tasks } = day;
