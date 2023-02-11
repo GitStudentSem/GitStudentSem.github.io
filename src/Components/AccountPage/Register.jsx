@@ -7,7 +7,7 @@ import user from "../../store/user";
 import { observer } from "mobx-react-lite";
 
 const StyledRegisterWrapper = styled.form`
-  width: 48%;
+  /* width: 48%; */
   height: 100%;
 `;
 const StyledInput = styled.input`
@@ -106,6 +106,7 @@ const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
       password,
     });
     if ("token" in data) {
+      window.localStorage.setItem("token", data.token);
       user.login(data.fullName);
     }
   };

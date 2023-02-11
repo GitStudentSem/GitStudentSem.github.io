@@ -5,7 +5,6 @@ import NavigationFromDate from "./NavigatonFromDate";
 import { FaUserAlt } from "react-icons/fa";
 import { TfiLayoutGrid2Alt, TfiLayoutGrid3Alt } from "react-icons/tfi";
 import { screenSize } from "../scripts/screens";
-import colorTheme from "../store/colorTheme";
 
 const StyledNavbar = styled.div`
   /* 

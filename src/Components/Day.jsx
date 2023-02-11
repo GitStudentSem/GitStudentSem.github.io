@@ -8,6 +8,8 @@ import {
   setStorageTasksList,
 } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
+import { observer } from "mobx-react-lite";
+import user from "../store/user";
 
 const StyledDay = styled.div`
   position: relative;
@@ -20,19 +22,10 @@ const StyledDay = styled.div`
   overflow: hidden;
 `;
 
-const Day = ({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
+const Day = observer(({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
   const [tasksOnDay, setTasksOnDay] = useState([]);
-  //   const [tasksOnDay, setTasksOnDay] = useState(getStorageTasksList(date));
 
-  const addTask = async (task) => {
-    setTasksOnDay((prev) => {
-      //   setStorageTasksList([...prev, task], date);
-      return [...prev, task];
-    });
-  };
-
-  useEffect(() => {
-    // setTasksOnDay(getStorageTasksList(date));
+  const fetchData = async () => {
     if (tasksfromDB.length) {
       let currentTasks = tasksfromDB.find((day) => {
         if (day.calendarDate === "other") {
@@ -48,10 +41,15 @@ const Day = ({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
         setTasksOnDay([...currentTasks.tasks]);
       }
     }
-  }, [date]);
+  };
 
-  // при каждом обновлении задач будет происходить запись в localStorage
-  useEffect(() => {}, [tasksOnDay, date]);
+  useEffect(() => {
+    if (user.isAuth) {
+      fetchData();
+    } else {
+      setTasksOnDay(getStorageTasksList(date));
+    }
+  }, [date]);
 
   return (
     <StyledDay
@@ -61,7 +59,7 @@ const Day = ({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
       }
     >
       <DayHeader date={date} monthNames={monthNames} weekDays={weekDays} />
-      <CreateTasksForm date={date} addTask={addTask} />
+      <CreateTasksForm date={date} setTasksOnDay={setTasksOnDay} />
       <TasksList
         tasksOnDay={tasksOnDay}
         setTasksOnDay={setTasksOnDay}
@@ -69,6 +67,6 @@ const Day = ({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
       />
     </StyledDay>
   );
-};
+});
 
 export default Day;

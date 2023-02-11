@@ -7,13 +7,16 @@ class User {
   constructor() {
     makeAutoObservable(this);
   }
-  login(name) {
+  async login(name) {
     this.name = name;
     this.isAuth = true;
   }
   logout() {
     this.name = "";
     this.isAuth = false;
+  }
+  getIsAuth() {
+    return this.isAuth;
   }
 }
 

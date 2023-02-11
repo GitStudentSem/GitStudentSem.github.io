@@ -27,7 +27,7 @@ const StyledApp = styled.div`
 
 const App = observer(() => {
   const [date, setDate] = useState(new Date());
-
+  const [tasksfromDB, setTaksFromDB] = useState([]);
   let monthNames = [
     "Январь",
     "Февраль",
@@ -46,17 +46,36 @@ const App = observer(() => {
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
   };
+
+  const fetchData = async () => {
+    const { data } = await axios.get("/tasks");
+    const selectedFields = [];
+    data.forEach((day) => {
+      const { calendarDate, tasks } = day;
+      selectedFields.push({
+        calendarDate:
+          calendarDate !== "other" ? new Date(calendarDate) : "other",
+        tasks,
+      });
+    });
+    setTaksFromDB(selectedFields);
+  };
+
   const authMe = async () => {
     const token = window.localStorage.getItem("token");
     if (token) {
       const { data } = await axios.get("/auth/me");
-
-      user.login(data.userData.fullName);
+      if (data) {
+        user.login(data.userData.fullName);
+        fetchData();
+      }
     }
   };
   useEffect(() => {
     handleResize();
+
     authMe();
+
     window.addEventListener("resize", handleResize);
     checkSizeLocalStorage();
 
@@ -72,7 +91,12 @@ const App = observer(() => {
         <Route
           path='/'
           element={
-            <Main monthNames={monthNames} date={date} setDate={setDate} />
+            <Main
+              monthNames={monthNames}
+              date={date}
+              setDate={setDate}
+              tasksfromDB={tasksfromDB}
+            />
           }
         />
         <Route path='/account' element={<AccountPage />} />

@@ -6,7 +6,9 @@ import WeekScreen from "./WeekScreen";
 import { screenSize } from "../scripts/screens";
 import axios from "../axios";
 import { useEffect } from "react";
-import { FaChessKing } from "react-icons/fa";
+import { observer } from "mobx-react-lite";
+import user from "../store/user";
+
 const StyledWrapper = styled.div`
   height: calc(100% - 55px); // 45px - это высота шапки margin + padding
   max-width: 1500px;
@@ -16,25 +18,31 @@ const StyledWrapper = styled.div`
   }
 `;
 
-const Main = ({ date, monthNames, setDate }) => {
+const Main = observer(({ tasksfromDB, date, monthNames, setDate }) => {
   const [isMonth, setIsMonth] = useState(true);
-  const [tasksfromDB, setTaksFromDB] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      const { data } = await axios.get("/tasks");
-      const selectedFields = [];
-      data.map((day) => {
-        const { calendarDate, tasks } = day;
-        selectedFields.push({
-          calendarDate:
-            calendarDate !== "other" ? new Date(calendarDate) : "other",
-          tasks,
-        });
-      });
-      setTaksFromDB(selectedFields);
-    }
-    fetchData();
-  }, []);
+  //   const [tasksfromDB, setTaksFromDB] = useState([]);
+
+  //   const fetchData = async () => {
+  //     const { data } = await axios.get("/tasks");
+  //     const selectedFields = [];
+  //     data.forEach((day) => {
+  //       const { calendarDate, tasks } = day;
+  //       selectedFields.push({
+  //         calendarDate:
+  //           calendarDate !== "other" ? new Date(calendarDate) : "other",
+  //         tasks,
+  //       });
+  //     });
+  //     console.log(selectedFields);
+  //     setTaksFromDB(selectedFields);
+  //   };
+
+  //   useEffect(() => {
+  //     if (user.isAuth) {
+  //       console.log("isauth");
+  //       fetchData();
+  //     }
+  //   }, []);
 
   return (
     <StyledWrapper>
@@ -61,6 +69,6 @@ const Main = ({ date, monthNames, setDate }) => {
       )}
     </StyledWrapper>
   );
-};
+});
 
 export default Main;

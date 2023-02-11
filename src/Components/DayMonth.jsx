@@ -5,6 +5,8 @@ import { MdOutlineWorkOutline } from "react-icons/md";
 import styled from "styled-components/macro";
 import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
+import { observer } from "mobx-react-lite";
+import user from "../store/user";
 
 const StyledDay = styled.button`
   display: flex;
@@ -44,51 +46,62 @@ const IconWrapper = styled.div`
   width: 100%;
 `;
 
-const DayMonth = ({ date, startColumn, setIsMonth, setDate, tasksfromDB }) => {
-  const [countTasksOnDay, setCountTasksOnDay] = useState(0);
-  useEffect(() => {
-    setCountTasksOnDay(getStorageTasksList(date).length);
-    if (tasksfromDB.length) {
-      let currentTasks = tasksfromDB.find((day) => {
-        if (day.calendarDate === "other") {
-          return day.calendarDate === date;
-        } else {
-          return (
-            transformDateToString(day.calendarDate) ===
-            transformDateToString(date)
-          );
-        }
-      });
-      if (currentTasks) {
-        setCountTasksOnDay(currentTasks.tasks.length);
-      }
-    }
-  }, [date]);
-  return (
-    <StyledDay
-      startColumn={startColumn}
-      onClick={() => {
-        setIsMonth(false);
-        setDate(date === "other" ? new Date() : date);
-      }}
-      isToday={
-        transformDateToString(date) === transformDateToString(new Date())
-      }
-      isDayOff={
-        date !== "other" && (date.getDay() === 0 || date.getDay() === 6)
-      }
-    >
-      <IconWrapper>
-        <FaRegCalendar size={30} />
-        <StyledDate>{date !== "other" ? date.getDate() : "..."}</StyledDate>
-      </IconWrapper>
-      <IconWrapper>
-        <MdOutlineWorkOutline size={35} />
+const DayMonth = observer(
+  ({ date, startColumn, setIsMonth, setDate, tasksfromDB }) => {
+    const [countTasksOnDay, setCountTasksOnDay] = useState(0);
 
-        <StyledCountTasks>{countTasksOnDay}</StyledCountTasks>
-      </IconWrapper>
-    </StyledDay>
-  );
-};
+    const fetchData = () => {
+      if (tasksfromDB.length) {
+        let currentTasks = tasksfromDB.find((day) => {
+          if (day.calendarDate === "other") {
+            return day.calendarDate === date;
+          } else {
+            return (
+              transformDateToString(day.calendarDate) ===
+              transformDateToString(date)
+            );
+          }
+        });
+        if (currentTasks) {
+          setCountTasksOnDay(currentTasks.tasks.length);
+        }
+      }
+    };
+
+    useEffect(() => {
+      if (user.isAuth) {
+        fetchData();
+      } else {
+        setCountTasksOnDay(getStorageTasksList(date).length);
+      }
+    }, [date]);
+
+    return (
+      <StyledDay
+        startColumn={startColumn}
+        onClick={() => {
+          setIsMonth(false);
+          setDate(date === "other" ? new Date() : date);
+        }}
+        isToday={
+          transformDateToString(date) === transformDateToString(new Date())
+        }
+        isDayOff={
+          date !== "other" && (date.getDay() === 0 || date.getDay() === 6)
+        }
+      >
+        <IconWrapper>
+          <FaRegCalendar size={30} />
+          <StyledDate>{date !== "other" ? date.getDate() : "..."}</StyledDate>
+        </IconWrapper>
+        <IconWrapper>
+          <MdOutlineWorkOutline size={35} />
+
+          <StyledCountTasks>{countTasksOnDay}</StyledCountTasks>
+        </IconWrapper>
+      </StyledDay>
+    );
+  }
+);
 
 export default DayMonth;

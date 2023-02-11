@@ -12,6 +12,9 @@ import {
 } from "../scripts/storageWorker/isImportantInput";
 import axios from "../axios";
 import { transformDateToString } from "../scripts/transformDateToString";
+import { observer } from "mobx-react-lite";
+import user from "../store/user";
+import { setStorageTasksList } from "../scripts/storageWorker/tasks";
 
 const StyledForm = styled.form`
   display: flex;
@@ -46,7 +49,7 @@ const StyledButton = styled.button`
   }
 `;
 
-const CreateTasksForm = ({ date, addTask }) => {
+const CreateTasksForm = observer(({ date, setTasksOnDay }) => {
   const [text, setText] = useState("");
   const [isImportant, setIsImportant] = useState(false);
 
@@ -64,6 +67,24 @@ const CreateTasksForm = ({ date, addTask }) => {
     setText(value);
     setStorageInputText(value, date);
   };
+  const addTask = async (task) => {
+    if (user.isAuth) {
+      await axios.post(`/tasks`, {
+        text,
+        isImportant,
+        date: date.toString(),
+      });
+      setTasksOnDay((prev) => {
+        return [...prev, task];
+      });
+    } else {
+      setTasksOnDay((prev) => {
+        console.log("first");
+        setStorageTasksList([...prev, task], date);
+        return [...prev, task];
+      });
+    }
+  };
 
   return (
     <StyledForm>
@@ -80,11 +101,6 @@ const CreateTasksForm = ({ date, addTask }) => {
       <StyledButton
         onClick={async (e) => {
           e.preventDefault();
-          const { data } = await axios.post(`/tasks`, {
-            text,
-            isImportant,
-            date: date.toString(),
-          });
           addTask({ text, isImportant });
 
           changeText("");
@@ -100,6 +116,6 @@ const CreateTasksForm = ({ date, addTask }) => {
       </StyledButton>
     </StyledForm>
   );
-};
+});
 
 export default CreateTasksForm;

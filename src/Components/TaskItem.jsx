@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components/macro";
 import { AiFillDelete, AiFillStar } from "react-icons/ai";
 import axios from "../axios";
+import { observer } from "mobx-react-lite";
+import user from "../store/user";
+import { setStorageTasksList } from "../scripts/storageWorker/tasks";
 
 const StyledTask = styled.li`
   display: flex;
@@ -47,60 +50,70 @@ const StyledButton = styled.button`
   }
 `;
 
-const TaskItem = ({ taskItem, index, tasksOnDay, setTasksOnDay, date }) => {
-  const changeIsImportant = async () => {
-    const copyTasks = [...tasksOnDay];
-    copyTasks[index].isImportant = !copyTasks[index].isImportant;
-    setTasksOnDay(copyTasks);
+const TaskItem = observer(
+  ({ taskItem, index, tasksOnDay, setTasksOnDay, date }) => {
+    const changeIsImportant = async () => {
+      const copyTasks = [...tasksOnDay];
+      copyTasks[index].isImportant = !copyTasks[index].isImportant;
+      setTasksOnDay(copyTasks);
 
-    console.log("IsImportant:", taskItem.isImportant, "ID:", taskItem._id);
-    await axios.patch(`/tasks/isImportant`, {
-      isImportant: taskItem.isImportant,
-      text: taskItem.text,
-      //   _id: taskItem._id,
-    });
-  };
+      if (user.isAuth) {
+        await axios.patch(`/tasks/isImportant`, {
+          isImportant: taskItem.isImportant,
+          text: taskItem.text,
+          //   _id: taskItem._id,
+        });
+      } else {
+        setStorageTasksList(copyTasks, date);
+      }
+    };
 
-  const deleteTask = async () => {
-    const copyTasks = [...tasksOnDay];
-    copyTasks.splice(index, 1);
+    const deleteTask = async () => {
+      const copyTasks = [...tasksOnDay];
+      copyTasks.splice(index, 1);
 
-    setTasksOnDay(copyTasks);
-    await axios.patch(`/tasks/delete`, {
-      date: date.toString(),
-      text: taskItem.text,
-    });
-  };
+      setTasksOnDay(copyTasks);
 
-  return (
-    <StyledTask>
-      <StyledButton
-        onClick={(e) => {
-          e.preventDefault();
-          changeIsImportant();
-        }}
-      >
-        <AiFillStar
-          size={20}
-          fill={
-            taskItem.isImportant
-              ? "rgb(255, 255, 255)"
-              : "rgba(255, 255, 255, 0.6)"
-          }
-        />
-      </StyledButton>
+      if (user.isAuth) {
+        await axios.patch(`/tasks/delete`, {
+          date: date.toString(),
+          text: taskItem.text,
+        });
+      } else {
+        setStorageTasksList(copyTasks, date);
+      }
+    };
 
-      <StyledTaskText>{taskItem.text}</StyledTaskText>
+    return (
+      <StyledTask>
+        <StyledButton
+          onClick={(e) => {
+            e.preventDefault();
+            changeIsImportant();
+          }}
+        >
+          <AiFillStar
+            size={20}
+            fill={
+              taskItem.isImportant
+                ? "rgb(255, 255, 255)"
+                : "rgba(255, 255, 255, 0.6)"
+            }
+          />
+        </StyledButton>
 
-      <StyledButton
-        onClick={() => {
-          deleteTask();
-        }}
-      >
-        <AiFillDelete size={20} fill='rgba(255, 255, 255, 0.8)' />
-      </StyledButton>
-    </StyledTask>
-  );
-};
+        <StyledTaskText>{taskItem.text}</StyledTaskText>
+
+        <StyledButton
+          onClick={() => {
+            deleteTask();
+          }}
+        >
+          <AiFillDelete size={20} fill='rgba(255, 255, 255, 0.8)' />
+        </StyledButton>
+      </StyledTask>
+    );
+  }
+);
 
 export default TaskItem;

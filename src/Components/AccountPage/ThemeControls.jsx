@@ -114,6 +114,7 @@ const ThemeControls = observer(() => {
   const forgetPalette = () => {
     LSRemovePalette();
     colorTheme.setIsNeedSaveColor(false);
+    colorTheme.generateColor();
   };
   return (
     <StyledThemeControls>
