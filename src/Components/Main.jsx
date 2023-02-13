@@ -18,31 +18,39 @@ const StyledWrapper = styled.div`
   }
 `;
 
-const Main = observer(({ tasksfromDB, date, monthNames, setDate }) => {
+const Main = observer(({ date, monthNames, setDate }) => {
   const [isMonth, setIsMonth] = useState(true);
-  //   const [tasksfromDB, setTaksFromDB] = useState([]);
+  const [tasksfromDB, setTaksFromDB] = useState([]);
 
-  //   const fetchData = async () => {
-  //     const { data } = await axios.get("/tasks");
-  //     const selectedFields = [];
-  //     data.forEach((day) => {
-  //       const { calendarDate, tasks } = day;
-  //       selectedFields.push({
-  //         calendarDate:
-  //           calendarDate !== "other" ? new Date(calendarDate) : "other",
-  //         tasks,
-  //       });
-  //     });
-  //     console.log(selectedFields);
-  //     setTaksFromDB(selectedFields);
-  //   };
+  const authMe = async () => {
+    const token = window.localStorage.getItem("token");
+    if (token) {
+      const { data } = await axios.get("/auth/me");
+      if (data) {
+        user.login(data.userData.fullName);
+        fetchData();
+      }
+    }
+  };
 
-  //   useEffect(() => {
-  //     if (user.isAuth) {
-  //       console.log("isauth");
-  //       fetchData();
-  //     }
-  //   }, []);
+  const fetchData = async () => {
+    const { data } = await axios.get("/tasks");
+    console.log(data);
+    const selectedFields = [];
+    data.forEach((day) => {
+      const { calendarDate, tasks } = day;
+      selectedFields.push({
+        calendarDate:
+          calendarDate !== "other" ? new Date(calendarDate) : "other",
+        tasks,
+      });
+    });
+    setTaksFromDB(selectedFields);
+  };
+
+  useEffect(() => {
+    authMe();
+  }, []);
 
   return (
     <StyledWrapper>
