@@ -71,6 +71,7 @@ const StyledHelloWrapper = styled.div`
 const StyledHelloBlock = styled.p`
   width: 100%;
   text-align: center;
+  margin-bottom: 10px;
 `;
 const StyledIsdev = styled.div`
   z-index: 100;
