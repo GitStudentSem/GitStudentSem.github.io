@@ -10,6 +10,9 @@ import {
   LSRemovePalette,
   LSSavePalette,
 } from "../../scripts/storageWorker/LSPalette";
+import { RiLoginCircleFill } from "react-icons/ri";
+import validateColor from "validate-color";
+import { useEffect } from "react";
 
 const StyledButton = styled.button`
   display: flex;
@@ -21,23 +24,27 @@ const StyledButton = styled.button`
   margin: 0;
   padding: 0;
   transition: all 0.3s;
-  padding: 5px;
   border-radius: 5px;
+  &:disabled {
+    opacity: 0.2;
+  }
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
   }
 `;
 const StyledThemeControls = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  /* justify-content: space-between; */
   flex-wrap: wrap;
   grid-row-start: 1;
-  grid-row-end: 1;
+  grid-row-end: 2;
   grid-column-start: 2;
   grid-column-end: 4;
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
-  padding: 10px;
+  padding: 0px 10px;
+  /* height: ; */
   @media (max-width: ${screenSize.phoneLg}px) {
     padding: 4px;
   }
@@ -46,13 +53,12 @@ const StyledButtonWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 49%;
-  position: relative;
   overflow: hidden;
   border-radius: 5px;
 `;
 const StyledButtonsWrapper = styled.div`
   width: 100%;
+  height: calc(100% - 43px); // 43px высота заголовка
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -67,55 +73,87 @@ const StyledText = styled.p`
   }
 `;
 const StyledIconSave = styled(FaSave)`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   @media (max-width: ${screenSize.phoneLg}px) {
     width: 35px;
     height: 35px;
   }
-  @media (max-width: ${screenSize.phoneMd}px) {
+  /* @media (max-width: ${screenSize.phoneMd}px) {
     width: 25px;
     height: 25px;
-  }
+  } */
 `;
 const StyledIconRandom = styled(FaRandom)`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   @media (max-width: ${screenSize.phoneLg}px) {
     width: 35px;
     height: 35px;
   }
-  @media (max-width: ${screenSize.phoneMd}px) {
+  /* @media (max-width: ${screenSize.phoneMd}px) {
     width: 25px;
     height: 25px;
-  }
+  } */
 `;
-const StyledIsdev = styled.div`
-  z-index: 100;
+const StyledColorForm = styled.form`
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  position: absolute;
-  text-align: center;
-  left: 0;
-  top: 0;
-  width: ${(props) => (props.isDev ? "100%" : "0px")};
-  height: ${(props) => (props.isDev ? "100%" : "0px")};
+`;
+const StyledInputsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+const StyledInput = styled.input`
+  outline: none;
+  border: none;
   background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
+  padding: 3px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  width: 99%;
+  &::placeholder {
+    color: rgb(255, 255, 255);
+  }
 `;
 
 const ThemeControls = observer(() => {
+  const [centerColor, setCenterColor] = useState("");
+  const [isErrorCenter, setIsErrorCenter] = useState(true);
+
+  const [outsideColor, setOutsideColor] = useState("");
+  const [isErrorOutside, setIsErrorOutside] = useState(true);
+
   const savePalette = () => {
     LSSavePalette(colorTheme.palette);
     colorTheme.setIsNeedSaveColor(true);
+    setCenterColor("");
+    setOutsideColor("");
   };
   const forgetPalette = () => {
     LSRemovePalette();
     colorTheme.setIsNeedSaveColor(false);
     colorTheme.generateColor();
+    setCenterColor("");
+    setOutsideColor("");
   };
+  const setUserColors = () => {
+    colorTheme.setPalette({ from: centerColor, to: outsideColor });
+    LSSavePalette(colorTheme.palette);
+    colorTheme.setIsNeedSaveColor(true);
+  };
+
+  useEffect(() => {
+    setIsErrorOutside(!validateColor(outsideColor));
+  }, [outsideColor]);
+
+  useEffect(() => {
+    console.log(validateColor(centerColor), centerColor);
+    setIsErrorCenter(!validateColor(centerColor));
+  }, [centerColor]);
+
   return (
     <StyledThemeControls>
       <Title>Управление цветами</Title>
@@ -134,6 +172,7 @@ const ThemeControls = observer(() => {
               }
             />
           </StyledButton>
+
           <StyledText>Сохранить эти цвета</StyledText>
         </StyledButtonWrapper>
 
@@ -150,45 +189,43 @@ const ThemeControls = observer(() => {
               }
             />
           </StyledButton>
+
           <StyledText>Случайные цвета</StyledText>
         </StyledButtonWrapper>
-        <StyledButtonWrapper>
-          <StyledButton
-            title='Палитра создается случайным образом'
-            onClick={forgetPalette}
-          >
-            <StyledIconRandom
-              fill={
-                colorTheme.isNeedSaveColor
-                  ? "rgba(255, 255, 255, 0.2)"
-                  : "rgba(255, 255, 255, 0.8)"
-              }
+        <StyledColorForm>
+          <StyledInputsWrapper>
+            <StyledInput
+              type='text'
+              value={centerColor}
+              onChange={(e) => {
+                setCenterColor(e.target.value);
+              }}
+              placeholder={`${colorTheme.palette.from}`}
             />
-          </StyledButton>
-          <StyledText>Случайный при каждом входе</StyledText>
-          <StyledIsdev isDev>
-            <p>Скоро появится</p>
-          </StyledIsdev>
-        </StyledButtonWrapper>
 
-        <StyledButtonWrapper>
-          <StyledButton
-            title='Палитра создается случайным образом'
-            onClick={forgetPalette}
-          >
-            <StyledIconRandom
-              fill={
-                colorTheme.isNeedSaveColor
-                  ? "rgba(255, 255, 255, 0.2)"
-                  : "rgba(255, 255, 255, 0.8)"
-              }
+            <StyledInput
+              type='text'
+              value={outsideColor}
+              onChange={(e) => {
+                setOutsideColor(e.target.value);
+              }}
+              placeholder={`${colorTheme.palette.to}`}
             />
+          </StyledInputsWrapper>
+
+          <StyledButton
+            type='submit'
+            disabled={
+              (centerColor && isErrorCenter) || (outsideColor && isErrorOutside)
+            }
+            onClick={(e) => {
+              e.preventDefault();
+              setUserColors();
+            }}
+          >
+            <RiLoginCircleFill size={25} fill='rgba(255, 255, 255, 0.8)' />
           </StyledButton>
-          <StyledText>Случайный при каждом входе</StyledText>
-          <StyledIsdev isDev>
-            <p>Скоро появится</p>
-          </StyledIsdev>
-        </StyledButtonWrapper>
+        </StyledColorForm>
       </StyledButtonsWrapper>
     </StyledThemeControls>
   );

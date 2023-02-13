@@ -11,6 +11,7 @@ import Login from "./Login";
 import user from "../../store/user";
 import { observer } from "mobx-react-lite";
 import { screenSize } from "../../scripts/screens";
+import validateColor from "validate-color";
 
 const StyledAccountPage = styled.div`
   width: 100%;
@@ -28,7 +29,7 @@ const StyledMain = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 5px;
+  gap: 2px;
   height: calc(100% - 55px); // с вычетом высоты шапки
 `;
 const StyledButton = styled.button`
@@ -49,7 +50,7 @@ const StyledButton = styled.button`
 `;
 const StyledFormsWrapper = styled.div`
   position: relative;
-  padding: 20px;
+  padding: 0px 20px;
   overflow: hidden;
   grid-row-start: 1;
   grid-row-end: 1;
@@ -61,7 +62,7 @@ const StyledFormsWrapper = styled.div`
   justify-content: center;
   align-items: center;
   @media (max-width: ${screenSize.phoneLg}px) {
-    padding: 5px;
+    padding: 0px 5px;
   }
 `;
 const StyledHelloWrapper = styled.div`

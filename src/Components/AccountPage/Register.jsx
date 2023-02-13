@@ -46,21 +46,6 @@ const StyledButton = styled.button`
     background-color: rgba(255, 255, 255, 0.2);
   }
 `;
-const StyledIsdev = styled.div`
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  position: absolute;
-  text-align: center;
-  left: 0;
-  top: 0;
-  width: ${(props) => (props.isDev ? "100%" : "0px")};
-  height: ${(props) => (props.isDev ? "100%" : "0px")};
-  background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
-`;
 
 const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
   const [email, setEmail] = useState("");
@@ -162,9 +147,6 @@ const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
           <RiLoginCircleFill size={30} fill='rgba(255, 255, 255, 0.8)' />
         </StyledButton>
       </StyledSendBlock>
-      {/* <StyledIsdev isDev>
-                <p>Скоро появится</p>
-            </StyledIsdev> */}
       <StyledButton
         onClick={() => {
           setIsLoginForm(true);
