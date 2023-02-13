@@ -45,10 +45,19 @@ const App = observer(() => {
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
   };
+  const authMe = async () => {
+    const token = window.localStorage.getItem("token");
+    if (token) {
+      const { data } = await axios.get("/auth/me");
+      if (data) {
+        user.login(data.userData.fullName);
+      }
+    }
+  };
   useEffect(() => {
     handleResize();
 
-    // authMe();
+    authMe();
 
     window.addEventListener("resize", handleResize);
     checkSizeLocalStorage();

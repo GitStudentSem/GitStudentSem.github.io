@@ -1,5 +1,5 @@
 import styled from "styled-components/macro";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoTodaySharp } from "react-icons/io5";
 import Register from "./Register";
@@ -8,9 +8,9 @@ import Attention from "./Attention";
 import ThemeControls from "./ThemeControls";
 import ViewControl from "./ViewControl";
 import Login from "./Login";
-import { screenSize } from "../../scripts/screens";
 import user from "../../store/user";
 import { observer } from "mobx-react-lite";
+import { screenSize } from "../../scripts/screens";
 
 const StyledAccountPage = styled.div`
   width: 100%;
@@ -60,6 +60,9 @@ const StyledFormsWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (max-width: ${screenSize.phoneLg}px) {
+    padding: 5px;
+  }
 `;
 const StyledHelloWrapper = styled.div`
   width: 100%;
@@ -73,45 +76,31 @@ const StyledHelloBlock = styled.p`
   text-align: center;
   margin-bottom: 10px;
 `;
-const StyledIsdev = styled.div`
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  position: absolute;
-  text-align: center;
-  left: 0;
-  top: 0;
-  width: ${(props) => (props.isDev ? "100%" : "0px")};
-  height: ${(props) => (props.isDev ? "100%" : "0px")};
-  background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
-`;
+// const StyledIsdev = styled.div`
+//   z-index: 100;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   font-size: 20px;
+//   position: absolute;
+//   text-align: center;
+//   left: 0;
+//   top: 0;
+//   width: ${(props) => (props.isDev ? "100%" : "0px")};
+//   height: ${(props) => (props.isDev ? "100%" : "0px")};
+//   background-color: rgba(255, 255, 255, 0.2);
+//   backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
+// `;
 
 const AccountPage = observer(() => {
-  //   const [name, setName] = useState("");
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [isRegisterForm, setIsRegisterForm] = useState(false);
   const [isLoginForm, setIsLoginForm] = useState(true);
 
-  const handleResize = () => {
-    if (window.innerWidth <= screenSize.desktop) {
-      setIsSmallScreen(true);
-    } else {
-      setIsSmallScreen(false);
-    }
-  };
   const logOut = () => {
     window.localStorage.removeItem("token");
     user.logout();
   };
 
-  useEffect(() => {
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-  }, []);
   return (
     <StyledAccountPage>
       <StyledHeader>
@@ -145,9 +134,6 @@ const AccountPage = observer(() => {
               )}
             </>
           )}
-          {/* <StyledIsdev isDev>
-                        <p>Скоро появится</p>
-                    </StyledIsdev> */}
         </StyledFormsWrapper>
 
         <ThemeControls />

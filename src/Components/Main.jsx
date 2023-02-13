@@ -22,20 +22,8 @@ const Main = observer(({ date, monthNames, setDate }) => {
   const [isMonth, setIsMonth] = useState(true);
   const [tasksfromDB, setTaksFromDB] = useState([]);
 
-  const authMe = async () => {
-    const token = window.localStorage.getItem("token");
-    if (token) {
-      const { data } = await axios.get("/auth/me");
-      if (data) {
-        user.login(data.userData.fullName);
-        fetchData();
-      }
-    }
-  };
-
   const fetchData = async () => {
     const { data } = await axios.get("/tasks");
-    console.log(data);
     const selectedFields = [];
     data.forEach((day) => {
       const { calendarDate, tasks } = day;
@@ -49,7 +37,7 @@ const Main = observer(({ date, monthNames, setDate }) => {
   };
 
   useEffect(() => {
-    authMe();
+    fetchData();
   }, []);
 
   return (
