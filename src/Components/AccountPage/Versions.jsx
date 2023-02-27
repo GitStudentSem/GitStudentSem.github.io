@@ -50,6 +50,11 @@ const Versions = () => {
     <div style={{ overflow: "hidden", borderRadius: "10px" }}>
       <StyledVersions>
         <Title>История версий</Title>
+        <StyledVersionNumber>1.0.1</StyledVersionNumber>
+        <StyledVersionText>
+          Добавлена возможность менять даты свайпом, проведите пальцем влево или
+          вправо для смены даты
+        </StyledVersionText>
         <StyledVersionNumber>1.0.0</StyledVersionNumber>
         <StyledVersionText>
           Создан сервер, теперь вы можете зарегестрироваться и получать данные с

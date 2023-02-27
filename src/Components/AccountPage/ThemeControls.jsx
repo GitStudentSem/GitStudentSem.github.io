@@ -150,7 +150,6 @@ const ThemeControls = observer(() => {
   }, [outsideColor]);
 
   useEffect(() => {
-    console.log(validateColor(centerColor), centerColor);
     setIsErrorCenter(!validateColor(centerColor));
   }, [centerColor]);
 

@@ -11,7 +11,6 @@ import Login from "./Login";
 import user from "../../store/user";
 import { observer } from "mobx-react-lite";
 import { screenSize } from "../../scripts/screens";
-import validateColor from "validate-color";
 
 const StyledAccountPage = styled.div`
   width: 100%;

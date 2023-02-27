@@ -7,7 +7,6 @@ import { screenSize } from "../scripts/screens";
 import axios from "../axios";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
-import user from "../store/user";
 
 const StyledWrapper = styled.div`
   height: calc(100% - 55px); // 45px - это высота шапки margin + padding
@@ -59,6 +58,7 @@ const Main = observer(({ date, monthNames, setDate }) => {
       ) : (
         <WeekScreen
           date={date}
+          setDate={setDate}
           monthNames={monthNames}
           tasksfromDB={tasksfromDB}
         />

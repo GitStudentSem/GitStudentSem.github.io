@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import Day from "./Day";
 import { screenSize } from "../scripts/screens.js";
+import { useSwipeable } from "react-swipeable";
+
 const StyledWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -20,7 +22,7 @@ const StyledWrapper = styled.div`
   }
 `;
 
-const WeekScreen = ({ date, monthNames, tasksfromDB }) => {
+const WeekScreen = ({ date, monthNames, tasksfromDB, setDate }) => {
   let weekDays = [
     "Воскресенье",
     "Понедельник",
@@ -48,8 +50,33 @@ const WeekScreen = ({ date, monthNames, tasksfromDB }) => {
   useEffect(() => {
     window.addEventListener("resize", () => setElementsCount(handleResize()));
   }, []);
+
+  const swipeDate = useSwipeable({
+    onSwipedLeft: () => {
+      setDate(
+        new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate() - elementsCount
+        )
+      );
+    },
+    onSwipedRight: () => {
+      setDate(
+        new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate() + elementsCount
+        )
+      );
+    },
+    swipeDuration: 500,
+    preventScrollOnSwipe: true,
+    trackMouse: true,
+  });
+
   return (
-    <StyledWrapper>
+    <StyledWrapper {...swipeDate}>
       {[...Array(elementsCount)].map((day, index) => (
         <Day
           key={

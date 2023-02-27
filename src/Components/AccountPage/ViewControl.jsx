@@ -1,5 +1,5 @@
 import styled from "styled-components/macro";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Title from "./Title";
 import { screenSize } from "../../scripts/screens";
 import { TfiLayoutGrid2Alt, TfiLayoutGrid3Alt } from "react-icons/tfi";

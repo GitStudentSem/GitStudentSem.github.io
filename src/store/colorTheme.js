@@ -1,5 +1,4 @@
 import { makeAutoObservable } from "mobx";
-import { IoPlayCircleOutline } from "react-icons/io5";
 
 class ColorTheme {
   palette = { from: "", to: "" }; //colorsTheme
@@ -20,7 +19,6 @@ class ColorTheme {
     this.palette = { from: getRandomColor(), to: getRandomColor() };
   }
   setPalette(palette) {
-    console.log(palette);
     if (palette.from && palette.to) {
       this.palette = palette;
     } else if (palette.from && !palette.to) {

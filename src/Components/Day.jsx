@@ -3,10 +3,7 @@ import styled from "styled-components/macro";
 import TasksList from "./TasksList";
 import CreateTasksForm from "./CreateTasksForm";
 import DayHeader from "./DayHeader";
-import {
-  getStorageTasksList,
-  setStorageTasksList,
-} from "../scripts/storageWorker/tasks";
+import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { observer } from "mobx-react-lite";
 import user from "../store/user";
