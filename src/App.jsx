@@ -1,5 +1,5 @@
 import Main from "./Components/Main";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 import { Routes, Route } from "react-router-dom";
 import AccountPage from "./Components/AccountPage/AccountPage";
@@ -41,11 +41,12 @@ const App = observer(() => {
     "Ноябрь",
     "Декабрь",
   ];
-  const handleResize = () => {
+  const handleResize = useCallback(() => {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
-  };
-  const authMe = async () => {
+  }, []);
+
+  const authMe = useCallback(async () => {
     const token = window.localStorage.getItem("token");
     if (token) {
       const { data } = await axios.get("/auth/me");
@@ -53,7 +54,8 @@ const App = observer(() => {
         user.login(data.userData.fullName);
       }
     }
-  };
+  }, []);
+
   useEffect(() => {
     handleResize();
 
@@ -66,7 +68,7 @@ const App = observer(() => {
     colorTheme.isNeedSaveColor
       ? colorTheme.setPalette(LSGetPalette())
       : colorTheme.generateColor();
-  }, [authMe, handleResize]);
+  }, [handleResize, authMe]);
 
   return (
     <StyledApp from={colorTheme.palette.from} to={colorTheme.palette.to}>

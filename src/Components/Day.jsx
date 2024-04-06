@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components/macro";
 import TasksList from "./TasksList";
 import CreateTasksForm from "./CreateTasksForm";
@@ -22,7 +22,7 @@ const StyledDay = styled.div`
 const Day = observer(({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
   const [tasksOnDay, setTasksOnDay] = useState([]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (tasksfromDB.length) {
       const currentTasks = tasksfromDB.find((day) => {
         if (day.calendarDate === "other") {
@@ -38,7 +38,7 @@ const Day = observer(({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
         setTasksOnDay([...currentTasks.tasks]);
       }
     }
-  };
+  }, [date, tasksfromDB]);
 
   useEffect(() => {
     if (user.isAuth) {
