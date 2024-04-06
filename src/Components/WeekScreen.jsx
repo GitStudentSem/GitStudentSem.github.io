@@ -23,7 +23,7 @@ const StyledWrapper = styled.div`
 `;
 
 const WeekScreen = ({ date, monthNames, tasksfromDB, setDate }) => {
-  let weekDays = [
+  const weekDays = [
     "Воскресенье",
     "Понедельник",
     "Вторник",
@@ -38,13 +38,14 @@ const WeekScreen = ({ date, monthNames, tasksfromDB, setDate }) => {
   function handleResize() {
     if (window.innerWidth <= screenSize.tablet) {
       return 1;
-    } else if (window.innerWidth <= screenSize.tabletLg) {
-      return 3;
-    } else if (window.innerWidth <= screenSize.widescreen) {
-      return 5;
-    } else {
-      return 7;
     }
+    if (window.innerWidth <= screenSize.tabletLg) {
+      return 3;
+    }
+    if (window.innerWidth <= screenSize.widescreen) {
+      return 5;
+    }
+    return 7;
   }
 
   useEffect(() => {

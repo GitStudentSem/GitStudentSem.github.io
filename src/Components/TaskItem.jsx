@@ -58,7 +58,7 @@ const TaskItem = observer(
       setTasksOnDay(copyTasks);
 
       if (user.isAuth) {
-        await axios.patch(`/tasks/isImportant`, {
+        await axios.patch("/tasks/isImportant", {
           isImportant: taskItem.isImportant,
           text: taskItem.text,
           //   _id: taskItem._id,
@@ -75,7 +75,7 @@ const TaskItem = observer(
       setTasksOnDay(copyTasks);
 
       if (user.isAuth) {
-        await axios.patch(`/tasks/delete`, {
+        await axios.patch("/tasks/delete", {
           date: date.toString(),
           text: taskItem.text,
         });

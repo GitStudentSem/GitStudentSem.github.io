@@ -1,15 +1,15 @@
 export const checkSizeLocalStorage = () => {
-    let _lsTotal = 0,
-        _xLen,
-        _x;
-    for (_x in localStorage) {
-        if (!localStorage.hasOwnProperty(_x)) {
-            continue;
-        }
-        _xLen = (localStorage[_x].length + _x.length) * 2;
-        _lsTotal += _xLen;
+  let _lsTotal = 0;
+  let _xLen;
+  let _x;
+  for (_x in localStorage) {
+    if (!Object.hasOwn(localStorage, _x)) {
+      continue;
     }
-    console.log("Всего занято = " + (_lsTotal / 1024).toFixed(2) + " KB");
-    // console.table(loadLocalStorageDB()));
-    return _lsTotal / 1024;
+    _xLen = (localStorage[_x].length + _x.length) * 2;
+    _lsTotal += _xLen;
+  }
+  console.log(`Всего занято = ${(_lsTotal / 1024).toFixed(2)} KB`);
+  // console.table(loadLocalStorageDB()));
+  return _lsTotal / 1024;
 };

@@ -52,15 +52,14 @@ const DayMonth = observer(
 
     const fetchData = () => {
       if (tasksfromDB.length) {
-        let currentTasks = tasksfromDB.find((day) => {
+        const currentTasks = tasksfromDB.find((day) => {
           if (day.calendarDate === "other") {
             return day.calendarDate === date;
-          } else {
-            return (
-              transformDateToString(day.calendarDate) ===
-              transformDateToString(date)
-            );
           }
+          return (
+            transformDateToString(day.calendarDate) ===
+            transformDateToString(date)
+          );
         });
         if (currentTasks) {
           setCountTasksOnDay(currentTasks.tasks.length);
@@ -74,7 +73,7 @@ const DayMonth = observer(
       } else {
         setCountTasksOnDay(getStorageTasksList(date).length);
       }
-    }, [date]);
+    }, [date, fetchData]);
 
     return (
       <StyledDay

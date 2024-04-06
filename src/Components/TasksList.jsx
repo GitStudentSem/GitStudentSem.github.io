@@ -14,7 +14,7 @@ const TasksList = ({ tasksOnDay, setTasksOnDay, date }) => {
       {tasksOnDay.map((taskItem, index) => {
         return (
           <TaskItem
-            key={taskItem.text + index}
+            key={`${taskItem.text}_${index}`}
             taskItem={taskItem}
             index={index}
             tasksOnDay={tasksOnDay}

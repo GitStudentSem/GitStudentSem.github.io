@@ -68,7 +68,7 @@ const CreateTasksForm = observer(({ date, setTasksOnDay }) => {
   };
   const addTask = async (task) => {
     if (user.isAuth) {
-      await axios.post(`/tasks`, {
+      await axios.post("/tasks", {
         text,
         isImportant,
         date: date.toString(),

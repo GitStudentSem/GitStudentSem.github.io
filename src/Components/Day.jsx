@@ -24,15 +24,14 @@ const Day = observer(({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
 
   const fetchData = async () => {
     if (tasksfromDB.length) {
-      let currentTasks = tasksfromDB.find((day) => {
+      const currentTasks = tasksfromDB.find((day) => {
         if (day.calendarDate === "other") {
           return day.calendarDate === date;
-        } else {
-          return (
-            transformDateToString(day.calendarDate) ===
-            transformDateToString(date)
-          );
         }
+        return (
+          transformDateToString(day.calendarDate) ===
+          transformDateToString(date)
+        );
       });
       if (currentTasks) {
         console.log(currentTasks.tasks);
@@ -47,7 +46,7 @@ const Day = observer(({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
     } else {
       setTasksOnDay(getStorageTasksList(date));
     }
-  }, [date]);
+  }, [date, fetchData]);
 
   return (
     <StyledDay

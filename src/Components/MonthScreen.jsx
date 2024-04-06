@@ -39,7 +39,7 @@ const MonthScreen = ({ date, setIsMonth, setDate, tasksfromDB }) => {
     <StyledWrapper {...swipeDate}>
       {[...Array(daysInMonth)].map((day, index) => (
         <DayMonth
-          key={currentMonth.getDate() + index}
+          key={`${currentMonth.getDate()}_${index}`}
           date={
             new Date(
               currentMonth.getFullYear(),

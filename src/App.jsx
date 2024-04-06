@@ -27,7 +27,7 @@ const StyledApp = styled.div`
 
 const App = observer(() => {
   const [date, setDate] = useState(new Date());
-  let monthNames = [
+  const monthNames = [
     "Январь",
     "Февраль",
     "Март",
@@ -42,7 +42,7 @@ const App = observer(() => {
     "Декабрь",
   ];
   const handleResize = () => {
-    let vh = window.innerHeight * 0.01;
+    const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
   };
   const authMe = async () => {
@@ -66,7 +66,7 @@ const App = observer(() => {
     colorTheme.isNeedSaveColor
       ? colorTheme.setPalette(LSGetPalette())
       : colorTheme.generateColor();
-  }, []);
+  }, [authMe, handleResize]);
 
   return (
     <StyledApp from={colorTheme.palette.from} to={colorTheme.palette.to}>
