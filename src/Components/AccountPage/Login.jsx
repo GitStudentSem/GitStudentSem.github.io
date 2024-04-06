@@ -48,10 +48,7 @@ const StyledButton = styled.button`
 
 const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
   const [email, setEmail] = useState("");
-  const [isValidEmail, setIsValidEmail] = useState(true);
-
   const [password, setPassword] = useState("");
-  const [isValidPassword, setIsValidPassword] = useState(true);
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -91,9 +88,6 @@ const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
       <StyledInput
         type='text'
         value={email}
-        onBlur={(e) => {
-          onChangeHandler(e, setEmail);
-        }}
         onChange={(e) => {
           onChangeHandler(e, setEmail);
         }}
@@ -102,9 +96,6 @@ const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
       <StyledInput
         type='text'
         value={password}
-        onBlur={(e) => {
-          onChangeHandler(e, setPassword);
-        }}
         onChange={(e) => {
           onChangeHandler(e, setPassword);
         }}

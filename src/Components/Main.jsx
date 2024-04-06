@@ -21,24 +21,24 @@ const Main = observer(({ date, monthNames, setDate }) => {
   const [isMonth, setIsMonth] = useState(true);
   const [tasksfromDB, setTaksFromDB] = useState([]);
 
-  const fetchData = async () => {
-    const { data } = await axios.get("/tasks");
-    const selectedFields = [];
-
-    for (const day of data) {
-      const { calendarDate, tasks } = day;
-      selectedFields.push({
-        calendarDate:
-          calendarDate !== "other" ? new Date(calendarDate) : "other",
-        tasks,
-      });
-    }
-    setTaksFromDB(selectedFields);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get("/tasks");
+      const selectedFields = [];
+
+      for (const day of data) {
+        const { calendarDate, tasks } = day;
+        selectedFields.push({
+          calendarDate:
+            calendarDate !== "other" ? new Date(calendarDate) : "other",
+          tasks,
+        });
+      }
+      setTaksFromDB(selectedFields);
+    };
+
     fetchData();
-  }, [fetchData]);
+  }, []);
 
   return (
     <StyledWrapper>

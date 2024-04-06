@@ -50,30 +50,30 @@ const DayMonth = observer(
   ({ date, startColumn, setIsMonth, setDate, tasksfromDB }) => {
     const [countTasksOnDay, setCountTasksOnDay] = useState(0);
 
-    const fetchData = () => {
-      if (tasksfromDB.length) {
-        const currentTasks = tasksfromDB.find((day) => {
-          if (day.calendarDate === "other") {
-            return day.calendarDate === date;
-          }
-          return (
-            transformDateToString(day.calendarDate) ===
-            transformDateToString(date)
-          );
-        });
-        if (currentTasks) {
-          setCountTasksOnDay(currentTasks.tasks.length);
-        }
-      }
-    };
-
     useEffect(() => {
       if (user.isAuth) {
+        const fetchData = () => {
+          if (tasksfromDB.length) {
+            const currentTasks = tasksfromDB.find((day) => {
+              if (day.calendarDate === "other") {
+                return day.calendarDate === date;
+              }
+              return (
+                transformDateToString(day.calendarDate) ===
+                transformDateToString(date)
+              );
+            });
+            if (currentTasks) {
+              setCountTasksOnDay(currentTasks.tasks.length);
+            }
+          }
+        };
+
         fetchData();
       } else {
         setCountTasksOnDay(getStorageTasksList(date).length);
       }
-    }, [date, fetchData]);
+    }, [date, tasksfromDB]);
 
     return (
       <StyledDay

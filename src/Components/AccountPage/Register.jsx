@@ -2,7 +2,6 @@ import styled from "styled-components/macro";
 import React, { useState } from "react";
 import { RiLoginCircleFill } from "react-icons/ri";
 import Title from "./Title";
-import axios from "../../axios";
 import user from "../../store/user";
 import { observer } from "mobx-react-lite";
 
@@ -89,9 +88,6 @@ const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
       <StyledInput
         type='text'
         value={fullName}
-        onBlur={(e) => {
-          onChangeHandler(e, setFullName);
-        }}
         onChange={(e) => {
           onChangeHandler(e, setFullName);
         }}
@@ -100,9 +96,6 @@ const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
       <StyledInput
         type='text'
         value={email}
-        onBlur={(e) => {
-          onChangeHandler(e, setEmail);
-        }}
         onChange={(e) => {
           onChangeHandler(e, setEmail);
         }}
@@ -111,9 +104,6 @@ const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
       <StyledInput
         type='text'
         value={password}
-        onBlur={(e) => {
-          onChangeHandler(e, setPassword);
-        }}
         onChange={(e) => {
           onChangeHandler(e, setPassword);
         }}
