@@ -7,7 +7,7 @@ import user from "../../store/user";
 import { observer } from "mobx-react-lite";
 
 const StyledRegisterWrapper = styled.form`
-  /* width: 48%; */
+  width: 60%;
   height: 100%;
 `;
 const StyledInput = styled.input`
@@ -16,7 +16,7 @@ const StyledInput = styled.input`
   background-color: rgba(255, 255, 255, 0.2);
   padding: 5px;
   border-radius: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   width: 100%;
   &::placeholder {
     color: rgb(255, 255, 255);
@@ -49,50 +49,32 @@ const StyledButton = styled.button`
 
 const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
   const [email, setEmail] = useState("");
-  const [isValidEmail, setIsValidEmail] = useState(true);
-
   const [password, setPassword] = useState("");
-  const [isValidPassword, setIsValidPassword] = useState(true);
-
   const [fullName, setFullName] = useState("");
-  const [isValidFullName, setIsValidFullName] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const validateEmail = () => {
-    if (email.length > 0) {
-      return setIsValidEmail(true);
-    }
-    return setIsValidEmail(false);
-  };
-
-  const validatePassword = () => {
-    if (password.length > 0) {
-      return setIsValidPassword(true);
-    }
-    return setIsValidPassword(false);
-  };
-
-  const validateFullName = () => {
-    if (password.length > 0) {
-      return setIsValidFullName(true);
-    }
-    return setIsValidFullName(false);
-  };
-
-  const onChangeHandler = (e, setValue, validateValue) => {
+  const onChangeHandler = (e, setValue) => {
     e.preventDefault();
     setValue(e.target.value);
-    validateValue(e.target.value);
   };
 
   const handleSubmit = async () => {
-    const { data } = await axios.post("/auth/register", {
-      fullName,
-      email,
-      password,
-    });
-    if ("token" in data) {
+    try {
+      const response = await fetch("http://localhost:3333/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullName, email, password }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        return setErrorMessage(data.message);
+      }
       window.localStorage.setItem("token", data.token);
       user.login(data.fullName);
+    } catch (error) {
+      error.message && setErrorMessage(error.message);
+      console.error({ error });
     }
   };
 
@@ -107,42 +89,38 @@ const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
       <StyledInput
         type='text'
         value={fullName}
-        onFocus={(e) => {
-          onChangeHandler(e, setFullName, validateFullName);
+        onBlur={(e) => {
+          onChangeHandler(e, setFullName);
         }}
         onChange={(e) => {
-          onChangeHandler(e, setFullName, validateFullName);
+          onChangeHandler(e, setFullName);
         }}
-        placeholder='Как к вам обращаться?'
+        placeholder='как к вам обращаться?'
       />
       <StyledInput
         type='text'
         value={email}
-        onFocus={(e) => {
-          onChangeHandler(e, setEmail, validateEmail);
+        onBlur={(e) => {
+          onChangeHandler(e, setEmail);
         }}
         onChange={(e) => {
-          onChangeHandler(e, setEmail, validateEmail);
+          onChangeHandler(e, setEmail);
         }}
         placeholder='почта'
       />
       <StyledInput
         type='text'
         value={password}
-        onFocus={(e) => {
-          onChangeHandler(e, setPassword, validatePassword);
+        onBlur={(e) => {
+          onChangeHandler(e, setPassword);
         }}
         onChange={(e) => {
-          onChangeHandler(e, setPassword, validatePassword);
+          onChangeHandler(e, setPassword);
         }}
         placeholder='пароль'
       />
       <StyledSendBlock>
-        <StyledStatus>
-          {isValidEmail && isValidPassword && isValidFullName
-            ? ""
-            : "В данных есть ошибка"}
-        </StyledStatus>
+        <StyledStatus>{errorMessage}</StyledStatus>
         <StyledButton>
           <RiLoginCircleFill size={30} fill='rgba(255, 255, 255, 0.8)' />
         </StyledButton>
