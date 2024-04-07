@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import TasksList from "./TasksList";
 import CreateTasksForm from "./CreateTasksForm";
@@ -7,8 +7,10 @@ import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { observer } from "mobx-react-lite";
 import user from "../store/user";
+import { ITask, TasksFromDBType } from "./Main";
 
-const StyledDay = styled.div`
+type StyledDayType = { isToday: boolean };
+const StyledDay = styled.div<StyledDayType>`
   position: relative;
   width: 100%;
   border-radius: 10px;
@@ -19,22 +21,24 @@ const StyledDay = styled.div`
   overflow: hidden;
 `;
 
-const Day = observer(({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
-  const [tasksOnDay, setTasksOnDay] = useState([]);
+interface IDayProps {
+  date: Date | "other";
+  tasksfromDB: TasksFromDBType[];
+}
+const Day = observer(({ date, tasksfromDB }: IDayProps) => {
+  const [tasksOnDay, setTasksOnDay] = useState<ITask[]>([]);
 
   const fetchData = useCallback(async () => {
     if (tasksfromDB.length) {
       const currentTasks = tasksfromDB.find((day) => {
-        console.log("day", day);
-        if (day.calendarDate === "other") {
-          return day.calendarDate === date;
+        if (day.dateKey === "other") {
+          return day.dateKey === date;
         }
         return (
           transformDateToString(day.dateKey) === transformDateToString(date)
         );
       });
       if (currentTasks) {
-        console.log(currentTasks.tasks);
         setTasksOnDay([...currentTasks.tasks]);
       }
     }
@@ -50,12 +54,11 @@ const Day = observer(({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
 
   return (
     <StyledDay
-      isDev={isDev}
       isToday={
         transformDateToString(date) === transformDateToString(new Date())
       }
     >
-      <DayHeader date={date} monthNames={monthNames} weekDays={weekDays} />
+      <DayHeader date={date} />
       <CreateTasksForm date={date} setTasksOnDay={setTasksOnDay} />
       <TasksList
         tasksOnDay={tasksOnDay}

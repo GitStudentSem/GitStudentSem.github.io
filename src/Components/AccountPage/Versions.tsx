@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import React from "react";
 import Title from "./Title";
 import { screenSize } from "../../scripts/screens";
 

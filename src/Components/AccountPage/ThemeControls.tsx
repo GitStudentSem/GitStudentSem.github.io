@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaSave } from "react-icons/fa";
 import { FaRandom } from "react-icons/fa";
 import Title from "./Title";
@@ -215,7 +215,8 @@ const ThemeControls = observer(() => {
           <StyledButton
             type='submit'
             disabled={
-              (centerColor && isErrorCenter) || (outsideColor && isErrorOutside)
+              (!!centerColor && isErrorCenter) ||
+              (!!outsideColor && isErrorOutside)
             }
             onClick={(e) => {
               e.preventDefault();

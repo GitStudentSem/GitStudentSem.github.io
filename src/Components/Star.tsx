@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { AiFillStar } from "react-icons/ai";
 
@@ -20,7 +19,9 @@ const StyledButton = styled.button`
     background-color: rgba(255, 255, 255, 0.15);
   }
 `;
-const Star = ({ setValue, value }) => {
+
+type StarPropsType = { setValue: () => void; value: boolean };
+const Star = ({ setValue, value }: StarPropsType) => {
   return (
     <StyledButton
       onClick={(e) => {

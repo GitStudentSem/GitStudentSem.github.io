@@ -1,7 +1,7 @@
-import React from "react";
 import styled from "styled-components";
 
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
+import { ReactElement } from "react";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -29,8 +29,17 @@ const StyledButton = styled.button`
     background-color: rgba(255, 255, 255, 0.2);
   }
 `;
+type NavigationFromDateType = {
+  setPrevDate: () => void;
+  setNextDate: () => void;
+  children: ReactElement;
+};
 
-const NavigationFromDate = ({ setPrevDate, setNextDate, children }) => {
+const NavigationFromDate = ({
+  setPrevDate,
+  setNextDate,
+  children,
+}: NavigationFromDateType) => {
   return (
     <StyledWrapper>
       <StyledButton onClick={setPrevDate}>

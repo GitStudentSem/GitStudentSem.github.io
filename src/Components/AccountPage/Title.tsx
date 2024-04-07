@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import React from "react";
 import { screenSize } from "../../scripts/screens";
+import { ReactNode } from "react";
 
 const StyledTitle = styled.p`
   text-align: center;
@@ -15,7 +15,11 @@ const StyledTitle = styled.p`
   }
 `;
 
-const Title = ({ children }) => {
+interface ITitleProps {
+  children: ReactNode;
+}
+
+const Title = ({ children }: ITitleProps) => {
   return <StyledTitle>{children}</StyledTitle>;
 };
 export default Title;

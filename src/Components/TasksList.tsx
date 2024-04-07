@@ -1,6 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 import TaskItem from "./TaskItem";
+import { ITask } from "./Main";
 
 const StyledTasksList = styled.ul`
   list-style-type: none;
@@ -8,7 +8,12 @@ const StyledTasksList = styled.ul`
   overflow-y: auto;
 `;
 
-const TasksList = ({ tasksOnDay, setTasksOnDay, date }) => {
+interface ITasksListProps {
+  date: Date | "other";
+  tasksOnDay: ITask[];
+  setTasksOnDay: (tasks: ITask[]) => void;
+}
+const TasksList = ({ tasksOnDay, setTasksOnDay, date }: ITasksListProps) => {
   return (
     <StyledTasksList>
       {tasksOnDay.map((taskItem, index) => {

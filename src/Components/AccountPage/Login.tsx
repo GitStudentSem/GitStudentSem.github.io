@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { RiLoginCircleFill } from "react-icons/ri";
 import Title from "./Title";
 import user from "../../store/user";
 import { observer } from "mobx-react-lite";
+import { logError } from "../../scripts/errorLog";
 
-const StyledRegisterWrapper = styled.form`
+const StyledLoginWrapper = styled.form`
   width: 60%;
   height: 100%;
 `;
@@ -46,23 +47,31 @@ const StyledButton = styled.button`
   }
 `;
 
-const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
+interface ILoginProps {
+  setIsLoginForm: (isLoginForm: boolean) => void;
+  setIsRegisterForm: (isregisterForm: boolean) => void;
+}
+
+const Login = observer(({ setIsLoginForm, setIsRegisterForm }: ILoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
+
   const [errorMessage, setErrorMessage] = useState("");
 
-  const onChangeHandler = (e, setValue) => {
+  const onChangeHandler = (
+    e: ChangeEvent<HTMLInputElement>,
+    setValue: (value: string) => void
+  ) => {
     e.preventDefault();
     setValue(e.target.value);
   };
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch("http://localhost:3333/auth/register", {
+      const response = await fetch("http://localhost:3333/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fullName, email, password }),
+        body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
 
@@ -72,27 +81,18 @@ const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
       window.localStorage.setItem("token", data.token);
       user.login(data.fullName);
     } catch (error) {
-      error.message && setErrorMessage(error.message);
-      console.error({ error });
+      logError(error);
     }
   };
 
   return (
-    <StyledRegisterWrapper
+    <StyledLoginWrapper
       onSubmit={(e) => {
         e.preventDefault();
         handleSubmit();
       }}
     >
-      <Title>Регистрация</Title>
-      <StyledInput
-        type='text'
-        value={fullName}
-        onChange={(e) => {
-          onChangeHandler(e, setFullName);
-        }}
-        placeholder='как к вам обращаться?'
-      />
+      <Title>Войти</Title>
       <StyledInput
         type='text'
         value={email}
@@ -117,13 +117,13 @@ const Login = observer(({ setIsLoginForm, setIsRegisterForm }) => {
       </StyledSendBlock>
       <StyledButton
         onClick={() => {
-          setIsLoginForm(true);
-          setIsRegisterForm(false);
+          setIsLoginForm(false);
+          setIsRegisterForm(true);
         }}
       >
-        Уже есть аккаунт? Войдите в него!
+        Еще нет аккаунта? Пора создать его!
       </StyledButton>
-    </StyledRegisterWrapper>
+    </StyledLoginWrapper>
   );
 });
 export default Login;

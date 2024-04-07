@@ -1,4 +1,4 @@
-import React from "react";
+import { monthNames, weekDays } from "../scripts/montsAndDaysEnum";
 import styled from "styled-components";
 
 const StyledHeader = styled.div`
@@ -17,7 +17,11 @@ const StyledHeaderDayOfWeek = styled(StyledHeaderDay)`
   color: rgba(255, 255, 255, 0.6);
 `;
 
-const DayHeader = ({ date, monthNames, weekDays }) => {
+interface IDayHeader {
+  date: Date | "other";
+}
+
+const DayHeader = ({ date }: IDayHeader) => {
   return (
     <StyledHeader>
       {date !== "other" ? (

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { FaRegCalendar } from "react-icons/fa";
 import { MdOutlineWorkOutline } from "react-icons/md";
@@ -7,8 +7,15 @@ import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { observer } from "mobx-react-lite";
 import user from "../store/user";
+import { TasksFromDBType } from "./Main";
 
-const StyledDay = styled.button`
+type IStyledDay = {
+  isToday: boolean;
+
+  isDayOff: boolean;
+  startColumn: number;
+};
+const StyledDay = styled.button<IStyledDay>`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -20,7 +27,6 @@ const StyledDay = styled.button`
       : props.isDayOff
       ? "rgba(255, 255, 255, 0.3)"
       : "rgba(255, 255, 255, 0.2)"};
-  backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
   &:last-child {
     grid-column-start: ${(props) => 8 - props.startColumn};
     grid-column-end: 8;
@@ -40,17 +46,20 @@ const StyledCountTasks = styled.div`
   bottom: 11px;
   width: 100%;
 `;
-const IconWrapper = styled.div`
+const StyledIconWrapper = styled.div`
   position: relative;
   height: min-content;
   width: 100%;
 `;
-const arr1 = [{ name: "array 1", innerItems: [{ innerName: "inner name 1" }] }];
-const arr2 = [...arr1];
-arr2[0].innerItems[0].innerName = "changed name";
-console.log(arr1);
+interface IDayMonthProps {
+  date: Date | "other";
+  setDate: (date: Date) => void;
+  setIsMonth: (isMonth: boolean) => void;
+  tasksfromDB: TasksFromDBType[];
+  startColumn?: number;
+}
 const DayMonth = observer(
-  ({ date, startColumn, setIsMonth, setDate, tasksfromDB }) => {
+  ({ date, startColumn, setIsMonth, setDate, tasksfromDB }: IDayMonthProps) => {
     const [countTasksOnDay, setCountTasksOnDay] = useState(0);
 
     useEffect(() => {
@@ -67,7 +76,7 @@ const DayMonth = observer(
                 transformDateToString(date)
               );
             });
-            console.log("currentTasks", currentTasks);
+
             if (currentTasks) {
               setCountTasksOnDay(currentTasks.tasks.length);
             }
@@ -82,7 +91,7 @@ const DayMonth = observer(
 
     return (
       <StyledDay
-        startColumn={startColumn}
+        startColumn={startColumn || 0}
         onClick={() => {
           setIsMonth(false);
           setDate(date === "other" ? new Date() : date);
@@ -94,15 +103,15 @@ const DayMonth = observer(
           date !== "other" && (date.getDay() === 0 || date.getDay() === 6)
         }
       >
-        <IconWrapper>
+        <StyledIconWrapper>
           <FaRegCalendar size={30} />
           <StyledDate>{date !== "other" ? date.getDate() : "..."}</StyledDate>
-        </IconWrapper>
-        <IconWrapper>
+        </StyledIconWrapper>
+        <StyledIconWrapper>
           <MdOutlineWorkOutline size={35} />
 
           <StyledCountTasks>{countTasksOnDay}</StyledCountTasks>
-        </IconWrapper>
+        </StyledIconWrapper>
       </StyledDay>
     );
   }

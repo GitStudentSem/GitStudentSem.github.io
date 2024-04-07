@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { AiFillDelete, AiFillStar } from "react-icons/ai";
 import axios from "../axios";
@@ -6,6 +5,8 @@ import { observer } from "mobx-react-lite";
 import user from "../store/user";
 import { setStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
+import { ITask } from "./Main";
+import { logError } from "../scripts/errorLog";
 
 const StyledTask = styled.li`
   display: flex;
@@ -50,9 +51,15 @@ const StyledButton = styled.button`
     background-color: rgba(255, 255, 255, 0.2);
   }
 `;
-
+interface ITaskItemProps {
+  date: Date | "other";
+  taskItem: ITask;
+  index: number;
+  tasksOnDay: ITask[];
+  setTasksOnDay: (tasks: ITask[]) => void;
+}
 const TaskItem = observer(
-  ({ taskItem, index, tasksOnDay, setTasksOnDay, date }) => {
+  ({ taskItem, index, tasksOnDay, setTasksOnDay, date }: ITaskItemProps) => {
     const changeIsImportant = async () => {
       if (user.isAuth) {
         try {
@@ -64,7 +71,7 @@ const TaskItem = observer(
           console.log("data", data);
           setTasksOnDay(data);
         } catch (error) {
-          console.error(error.response.data.message);
+          logError(error);
         }
       } else {
         const copyTasks = [...tasksOnDay];
@@ -84,7 +91,7 @@ const TaskItem = observer(
 
           setTasksOnDay(data);
         } catch (error) {
-          console.error(error.response.data.message);
+          logError(error);
         }
       } else {
         const copyTasks = [...tasksOnDay];

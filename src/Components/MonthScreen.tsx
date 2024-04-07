@@ -1,7 +1,7 @@
-import React from "react";
 import styled from "styled-components";
 import DayMonth from "./DayMonth";
 import { useSwipeable } from "react-swipeable";
+import { TasksFromDBType } from "./Main";
 
 const StyledWrapper = styled.div`
   display: grid;
@@ -11,13 +11,25 @@ const StyledWrapper = styled.div`
   grid-row-gap: 2px;
   height: 100%; // 45px - это высота шапки margin + padding
 `;
-
-const MonthScreen = ({ date, setIsMonth, setDate, tasksfromDB }) => {
+interface IMonthScreenProps {
+  date: Date;
+  setDate: (date: Date) => void;
+  setIsMonth: (isMonth: boolean) => void;
+  tasksfromDB: TasksFromDBType[];
+}
+const MonthScreen = ({
+  date,
+  setIsMonth,
+  setDate,
+  tasksfromDB,
+}: IMonthScreenProps) => {
   //* при обновлении date компонент будет перерисован
   //* currentMonth nextMont daysInMonth будут рассчитаны заново
   const currentMonth = new Date(date.getFullYear(), date.getMonth(), 1);
   const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
-  const daysInMonth = Math.round((nextMonth - currentMonth) / 1000 / 3600 / 24);
+  const daysInMonth = Math.round(
+    (Number(nextMonth) - Number(currentMonth)) / 1000 / 3600 / 24
+  );
 
   const swipeDate = useSwipeable({
     onSwipedLeft: () => {
@@ -37,7 +49,7 @@ const MonthScreen = ({ date, setIsMonth, setDate, tasksfromDB }) => {
 
   return (
     <StyledWrapper {...swipeDate}>
-      {[...Array(daysInMonth)].map((day, index) => (
+      {[...Array(daysInMonth)].map((_day, index) => (
         <DayMonth
           key={`${currentMonth.getDate()}_${index}`}
           date={

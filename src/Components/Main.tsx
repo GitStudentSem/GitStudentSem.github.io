@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import MonthScreen from "./MonthScreen";
 import Navbar from "./Navbar";
@@ -7,6 +7,7 @@ import { screenSize } from "../scripts/screens";
 import axios from "../axios";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import { logError } from "../scripts/errorLog";
 
 const StyledWrapper = styled.div`
   height: calc(100% - 55px); // 45px - это высота шапки margin + padding
@@ -17,15 +18,30 @@ const StyledWrapper = styled.div`
   }
 `;
 
-const Main = observer(({ date, monthNames, setDate }) => {
+export type ITask = {
+  text: string;
+  isImportant: boolean;
+  id: string;
+};
+
+export type TasksFromDBType = {
+  dateKey: Date | "other";
+  tasks: ITask[];
+};
+
+interface IMainProps {
+  date: Date;
+  setDate: (date: Date) => void;
+}
+const Main = observer(({ date, setDate }: IMainProps) => {
   const [isMonth, setIsMonth] = useState(true);
-  const [tasksfromDB, setTaksFromDB] = useState([]);
+  const [tasksfromDB, setTaksFromDB] = useState<TasksFromDBType[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get("/tasks/all");
-        const selectedFields = [];
+        const selectedFields: TasksFromDBType[] = [];
         for (const dateKey in data) {
           selectedFields.push({
             dateKey: dateKey !== "other" ? new Date(dateKey) : "other",
@@ -34,7 +50,7 @@ const Main = observer(({ date, monthNames, setDate }) => {
         }
         setTaksFromDB(selectedFields);
       } catch (error) {
-        console.error(error.response.data.message);
+        logError(error);
       }
     };
 
@@ -44,7 +60,6 @@ const Main = observer(({ date, monthNames, setDate }) => {
   return (
     <StyledWrapper>
       <Navbar
-        monthNames={monthNames}
         date={date}
         setDate={setDate}
         setIsMonth={setIsMonth}
@@ -58,12 +73,7 @@ const Main = observer(({ date, monthNames, setDate }) => {
           tasksfromDB={tasksfromDB}
         />
       ) : (
-        <WeekScreen
-          date={date}
-          setDate={setDate}
-          monthNames={monthNames}
-          tasksfromDB={tasksfromDB}
-        />
+        <WeekScreen date={date} setDate={setDate} tasksfromDB={tasksfromDB} />
       )}
     </StyledWrapper>
   );

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoTodaySharp } from "react-icons/io5";
 import Register from "./Register";
@@ -141,7 +141,7 @@ const AccountPage = observer(() => {
 
         <Versions />
 
-        <ViewControl />
+        <ViewControl setColorsTheme={() => {}} colorsTheme={() => {}} />
 
         <Attention />
       </StyledMain>

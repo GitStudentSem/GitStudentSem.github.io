@@ -1,10 +1,16 @@
 import { makeAutoObservable } from "mobx";
 
+export type PaletteType = {
+  from: string;
+  to: string;
+};
 class ColorTheme {
-  palette = { from: "", to: "" }; //colorsTheme
-  isNeedSaveColor = false;
+  palette: PaletteType;
+  isNeedSaveColor: boolean;
 
   constructor() {
+    this.palette = { from: "", to: "" };
+    this.isNeedSaveColor = false;
     makeAutoObservable(this);
   }
   generateColor() {
@@ -18,7 +24,8 @@ class ColorTheme {
     };
     this.palette = { from: getRandomColor(), to: getRandomColor() };
   }
-  setPalette(palette) {
+
+  setPalette(palette: PaletteType) {
     if (palette.from && palette.to) {
       this.palette = palette;
     } else if (palette.from && !palette.to) {
@@ -27,8 +34,8 @@ class ColorTheme {
       this.palette.to = palette.to;
     }
   }
-  setIsNeedSaveColor(isNeed) {
-    this.isNeedSaveColor = isNeed;
+  setIsNeedSaveColor(isNeedSaveColor: boolean) {
+    this.isNeedSaveColor = isNeedSaveColor;
   }
 }
 

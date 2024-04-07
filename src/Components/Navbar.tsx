@@ -1,10 +1,10 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import NavigationFromDate from "./NavigatonFromDate";
 import { FaUserAlt } from "react-icons/fa";
 import { TfiLayoutGrid2Alt, TfiLayoutGrid3Alt } from "react-icons/tfi";
 import { screenSize } from "../scripts/screens";
+import { monthNames } from "../scripts/montsAndDaysEnum";
 
 const StyledNavbar = styled.div`
   /* 
@@ -21,7 +21,12 @@ const StyledNavbar = styled.div`
     flex-wrap: wrap;
   }
 `;
-const StyledButton = styled.button`
+
+interface IStyledButton {
+  isMonth?: boolean;
+}
+
+const StyledButton = styled.button<IStyledButton>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,7 +61,13 @@ const StyledButtons = styled.div`
   }
 `;
 
-const Navbar = ({ monthNames, date, setDate, setIsMonth, isMonth }) => {
+interface INavbarProps {
+  date: Date;
+  setDate: (date: Date) => void;
+  setIsMonth: (isMonth: boolean) => void;
+  isMonth: boolean;
+}
+const Navbar = ({ date, setDate, setIsMonth, isMonth }: INavbarProps) => {
   return (
     <StyledNavbar>
       <NavigationFromDate

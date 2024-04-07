@@ -1,5 +1,5 @@
 import Main from "./Components/Main";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
 import AccountPage from "./Components/AccountPage/AccountPage";
@@ -7,11 +7,12 @@ import AccountPage from "./Components/AccountPage/AccountPage";
 import NotFoundPage from "./Components/NotFoundPage";
 import { checkSizeLocalStorage } from "./scripts/storageWorker/checkSizeLocalStorage";
 import { observer } from "mobx-react-lite";
-import colorTheme from "./store/colorTheme";
+import colorTheme, { PaletteType } from "./store/colorTheme";
 import { LSGetPalette } from "./scripts/storageWorker/LSPalette";
 import user from "./store/user";
+import { logError } from "./scripts/errorLog";
 
-const StyledApp = styled.div`
+const StyledApp = styled.div<PaletteType>`
   display: flex;
   justify-content: center;
   padding: 5px;
@@ -25,21 +26,8 @@ const StyledApp = styled.div`
 `;
 
 const App = observer(() => {
-  const [date, setDate] = useState(new Date());
-  const monthNames = [
-    "Январь",
-    "Февраль",
-    "Март",
-    "Апрель",
-    "Май",
-    "Июнь",
-    "Июль",
-    "Август",
-    "Сентябрь",
-    "Октябрь",
-    "Ноябрь",
-    "Декабрь",
-  ];
+  const [date, setDate] = useState<Date>(new Date());
+
   const handleResize = useCallback(() => {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
@@ -63,8 +51,7 @@ const App = observer(() => {
       }
       user.login(data.fullName);
     } catch (error) {
-      error.message && console.error(error.message);
-      console.error(error);
+      logError(error);
     }
   }, []);
 
@@ -85,12 +72,7 @@ const App = observer(() => {
   return (
     <StyledApp from={colorTheme.palette.from} to={colorTheme.palette.to}>
       <Routes>
-        <Route
-          path='/'
-          element={
-            <Main monthNames={monthNames} date={date} setDate={setDate} />
-          }
-        />
+        <Route path='/' element={<Main date={date} setDate={setDate} />} />
         <Route path='/account' element={<AccountPage />} />
         <Route path='*' element={<NotFoundPage />} />
         {/* <Route path='/login' element={<Login />} /> */}

@@ -7,7 +7,7 @@ class User {
   constructor() {
     makeAutoObservable(this);
   }
-  async login(name) {
+  async login(name: string) {
     this.name = name;
     this.isAuth = true;
   }

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-import Day from "./Day";
+import Day from "./Day.js";
 import { screenSize } from "../scripts/screens.js";
 import { useSwipeable } from "react-swipeable";
+import { TasksFromDBType } from "./Main.js";
 
 const StyledWrapper = styled.div`
   display: grid;
@@ -21,17 +22,12 @@ const StyledWrapper = styled.div`
     grid-template-columns: repeat(1, 1fr);
   }
 `;
-
-const WeekScreen = ({ date, monthNames, tasksfromDB, setDate }) => {
-  const weekDays = [
-    "Воскресенье",
-    "Понедельник",
-    "Вторник",
-    "Среда",
-    "Четверг",
-    "Пятница",
-    "Суббота",
-  ];
+interface IWeekScreenProps {
+  date: Date;
+  setDate: (date: Date) => void;
+  tasksfromDB: TasksFromDBType[];
+}
+const WeekScreen = ({ date, tasksfromDB, setDate }: IWeekScreenProps) => {
   // choose the screen size
   const [elementsCount, setElementsCount] = useState(handleResize());
   // choose the screen size
@@ -78,16 +74,13 @@ const WeekScreen = ({ date, monthNames, tasksfromDB, setDate }) => {
 
   return (
     <StyledWrapper {...swipeDate}>
-      {[...Array(elementsCount)].map((day, index) => (
+      {[...Array(elementsCount)].map((_day, index) => (
         <Day
-          key={
-            new Date(
-              date.getFullYear(),
-              date.getMonth(),
-              date.getDate() + index
-            )
-          }
-          monthNames={monthNames}
+          key={new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate() + index
+          ).toString()}
           date={
             new Date(
               date.getFullYear(),
@@ -95,7 +88,6 @@ const WeekScreen = ({ date, monthNames, tasksfromDB, setDate }) => {
               date.getDate() + index
             )
           }
-          weekDays={weekDays}
           tasksfromDB={tasksfromDB}
         />
       ))}

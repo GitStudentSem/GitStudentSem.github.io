@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import React from "react";
 import Title from "./Title";
 import { screenSize } from "../../scripts/screens";
 import { TfiLayoutGrid2Alt, TfiLayoutGrid3Alt } from "react-icons/tfi";
@@ -80,7 +79,11 @@ const StyledIconMonth = styled(TfiLayoutGrid3Alt)`
     height: 25px;
   }
 `;
-const StyledIsdev = styled.div`
+
+interface IStyledIsDev {
+  isDev: boolean;
+}
+const StyledIsDev = styled.div<IStyledIsDev>`
   z-index: 100;
   display: flex;
   align-items: center;
@@ -96,7 +99,12 @@ const StyledIsdev = styled.div`
   backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
 `;
 
-const ViewControl = ({ setColorsTheme, colorsTheme }) => {
+type ViewControlPropsType = {
+  setColorsTheme: () => void;
+  colorsTheme: () => void;
+};
+const ViewControl = ({ setColorsTheme, colorsTheme }: ViewControlPropsType) => {
+  console.log({ setColorsTheme, colorsTheme });
   // const [isNeedSaveColor, setIsNeedSaveColor] = useState();
 
   // useEffect(() => {
@@ -166,9 +174,9 @@ const ViewControl = ({ setColorsTheme, colorsTheme }) => {
           <StyledText>Месяца</StyledText>
         </StyledButtonWrapper>
       </StyledButtonsWrapper>
-      <StyledIsdev isDev>
+      <StyledIsDev isDev>
         <p>Скоро появится</p>
-      </StyledIsdev>
+      </StyledIsDev>
     </StyledViewControls>
   );
 };
