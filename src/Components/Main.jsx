@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import MonthScreen from "./MonthScreen";
 import Navbar from "./Navbar";
 import WeekScreen from "./WeekScreen";

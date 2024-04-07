@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import DayMonth from "./DayMonth";
 import { useSwipeable } from "react-swipeable";
 

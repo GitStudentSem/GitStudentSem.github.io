@@ -1,6 +1,6 @@
 import Main from "./Components/Main";
 import React, { useCallback, useEffect, useState } from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
 import AccountPage from "./Components/AccountPage/AccountPage";
 // import PrivateRoute from './Components/PrivateRoute';

@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoTodaySharp } from "react-icons/io5";
@@ -18,6 +18,7 @@ const StyledAccountPage = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
+
 const StyledHeader = styled.div`
   display: flex;
   justify-content: center;

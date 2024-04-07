@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import TasksList from "./TasksList";
 import CreateTasksForm from "./CreateTasksForm";
 import DayHeader from "./DayHeader";

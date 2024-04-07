@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { AiFillDelete, AiFillStar } from "react-icons/ai";
 import axios from "../axios";
 import { observer } from "mobx-react-lite";

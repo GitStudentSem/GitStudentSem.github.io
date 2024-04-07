@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { FaRegCalendar } from "react-icons/fa";
 import { MdOutlineWorkOutline } from "react-icons/md";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { observer } from "mobx-react-lite";

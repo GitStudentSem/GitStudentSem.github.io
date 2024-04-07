@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import React, { useState } from "react";
 import { RiLoginCircleFill } from "react-icons/ri";
 import Title from "./Title";

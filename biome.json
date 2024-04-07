@@ -15,7 +15,7 @@
   },
   "formatter": {
     "enabled": true,
-    "formatWithErrors": false,
+    "formatWithErrors": true,
     "indentStyle": "space",
     "indentWidth": 2,
     "lineWidth": 80
@@ -23,7 +23,7 @@
   "javascript": {
     "formatter": {
       "arrowParentheses": "always",
-      "jsxQuoteStyle": "double",
+      "jsxQuoteStyle": "single",
       "quoteStyle": "single",
       "semicolons": "always",
       "trailingComma": "all",

@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import React, { useState } from "react";
 import { FaSave } from "react-icons/fa";
 import { FaRandom } from "react-icons/fa";

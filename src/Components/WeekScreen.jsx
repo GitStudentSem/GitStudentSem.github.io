@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import Day from "./Day";
 import { screenSize } from "../scripts/screens.js";
 import { useSwipeable } from "react-swipeable";

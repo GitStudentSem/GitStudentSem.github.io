@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import NavigationFromDate from "./NavigatonFromDate";
 import { FaUserAlt } from "react-icons/fa";
 import { TfiLayoutGrid2Alt, TfiLayoutGrid3Alt } from "react-icons/tfi";
