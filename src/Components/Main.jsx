@@ -24,15 +24,12 @@ const Main = observer(({ date, monthNames, setDate }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("/tasks");
+        const { data } = await axios.get("/tasks/all");
         const selectedFields = [];
-        console.log("data", data);
-        for (const day of data) {
-          const { dateKey, tasks } = day;
-
+        for (const dateKey in data) {
           selectedFields.push({
-            calendarDate: dateKey !== "other" ? new Date(dateKey) : "other",
-            tasks,
+            dateKey: dateKey !== "other" ? new Date(dateKey) : "other",
+            tasks: data[dateKey],
           });
         }
         setTaksFromDB(selectedFields);

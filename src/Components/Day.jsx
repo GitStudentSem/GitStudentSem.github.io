@@ -25,12 +25,12 @@ const Day = observer(({ date, monthNames, weekDays, isDev, tasksfromDB }) => {
   const fetchData = useCallback(async () => {
     if (tasksfromDB.length) {
       const currentTasks = tasksfromDB.find((day) => {
+        console.log("day", day);
         if (day.calendarDate === "other") {
           return day.calendarDate === date;
         }
         return (
-          transformDateToString(day.calendarDate) ===
-          transformDateToString(date)
+          transformDateToString(day.dateKey) === transformDateToString(date)
         );
       });
       if (currentTasks) {

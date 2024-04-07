@@ -45,12 +45,16 @@ const IconWrapper = styled.div`
   height: min-content;
   width: 100%;
 `;
-
+const arr1 = [{ name: "array 1", innerItems: [{ innerName: "inner name 1" }] }];
+const arr2 = [...arr1];
+arr2[0].innerItems[0].innerName = "changed name";
+console.log(arr1);
 const DayMonth = observer(
   ({ date, startColumn, setIsMonth, setDate, tasksfromDB }) => {
     const [countTasksOnDay, setCountTasksOnDay] = useState(0);
 
     useEffect(() => {
+      console.log("user.isAuth", user.isAuth);
       if (user.isAuth) {
         const getTasksOnDay = () => {
           if (tasksfromDB.length) {
@@ -63,6 +67,7 @@ const DayMonth = observer(
                 transformDateToString(date)
               );
             });
+            console.log("currentTasks", currentTasks);
             if (currentTasks) {
               setCountTasksOnDay(currentTasks.tasks.length);
             }

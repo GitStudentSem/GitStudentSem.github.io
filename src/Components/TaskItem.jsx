@@ -58,9 +58,10 @@ const TaskItem = observer(
         try {
           const { data } = await axios.patch("/tasks/isImportant", {
             dateKey: transformDateToString(date),
-            isImportant: taskItem.isImportant,
+            isImportant: !taskItem.isImportant,
             id: taskItem.id,
           });
+          console.log("data", data);
           setTasksOnDay(data);
         } catch (error) {
           console.error(error.response.data.message);
