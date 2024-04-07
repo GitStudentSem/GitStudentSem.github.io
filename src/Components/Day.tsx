@@ -6,7 +6,6 @@ import DayHeader from "./DayHeader";
 import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { observer } from "mobx-react-lite";
-import user from "../store/user";
 import { TasksStore } from "../store/tasks";
 import { ITask } from "../store/tasks";
 
@@ -29,29 +28,25 @@ const Day = observer(({ date }: IDayProps) => {
   const [tasksOnDay, setTasksOnDay] = useState<ITask[]>([]);
   const { tasksFromDB } = TasksStore;
 
-  const fetchData = useCallback(async () => {
-    if (tasksFromDB.length) {
-      const currentTasks = tasksFromDB.find((day) => {
-        if (day.dateKey === "other") {
-          return day.dateKey === date;
-        }
-        return (
-          transformDateToString(day.dateKey) === transformDateToString(date)
-        );
-      });
-      if (currentTasks) {
-        setTasksOnDay([...currentTasks.tasks]);
+  const getTasksOnDay = useCallback(async () => {
+    const currentTasks = tasksFromDB.find((day) => {
+      if (day.dateKey === "other") {
+        return day.dateKey === date;
       }
+      return transformDateToString(day.dateKey) === transformDateToString(date);
+    });
+    if (currentTasks) {
+      setTasksOnDay([...currentTasks.tasks]);
     }
   }, [date, tasksFromDB]);
 
   useEffect(() => {
-    if (user.isAuth) {
-      fetchData();
+    if (tasksFromDB.length) {
+      getTasksOnDay();
     } else {
       setTasksOnDay(getStorageTasksList(date));
     }
-  }, [date, fetchData]);
+  }, [date, getTasksOnDay, tasksFromDB]);
 
   return (
     <StyledDay

@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Day from "./Day.js";
 import { screenSize } from "../scripts/screens.js";
 import { useSwipeable } from "react-swipeable";
+import { ScreenStore } from "../store/screen.js";
+import { observer } from "mobx-react-lite";
 
 const StyledWrapper = styled.div`
   display: grid;
@@ -21,11 +23,8 @@ const StyledWrapper = styled.div`
     grid-template-columns: repeat(1, 1fr);
   }
 `;
-interface IWeekScreenProps {
-  date: Date;
-  setDate: (date: Date) => void;
-}
-const WeekScreen = ({ date, setDate }: IWeekScreenProps) => {
+
+const WeekScreen = observer(() => {
   // choose the screen size
   const [elementsCount, setElementsCount] = useState(handleResize());
   // choose the screen size
@@ -48,20 +47,20 @@ const WeekScreen = ({ date, setDate }: IWeekScreenProps) => {
 
   const swipeDate = useSwipeable({
     onSwipedLeft: () => {
-      setDate(
+      ScreenStore.setDate(
         new Date(
-          date.getFullYear(),
-          date.getMonth(),
-          date.getDate() - elementsCount
+          ScreenStore.date.getFullYear(),
+          ScreenStore.date.getMonth(),
+          ScreenStore.date.getDate() - elementsCount
         )
       );
     },
     onSwipedRight: () => {
-      setDate(
+      ScreenStore.setDate(
         new Date(
-          date.getFullYear(),
-          date.getMonth(),
-          date.getDate() + elementsCount
+          ScreenStore.date.getFullYear(),
+          ScreenStore.date.getMonth(),
+          ScreenStore.date.getDate() + elementsCount
         )
       );
     },
@@ -75,15 +74,15 @@ const WeekScreen = ({ date, setDate }: IWeekScreenProps) => {
       {[...Array(elementsCount)].map((_day, index) => (
         <Day
           key={new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate() + index
+            ScreenStore.date.getFullYear(),
+            ScreenStore.date.getMonth(),
+            ScreenStore.date.getDate() + index
           ).toString()}
           date={
             new Date(
-              date.getFullYear(),
-              date.getMonth(),
-              date.getDate() + index
+              ScreenStore.date.getFullYear(),
+              ScreenStore.date.getMonth(),
+              ScreenStore.date.getDate() + index
             )
           }
         />
@@ -92,6 +91,6 @@ const WeekScreen = ({ date, setDate }: IWeekScreenProps) => {
       <Day date='other' />
     </StyledWrapper>
   );
-};
+});
 
 export default WeekScreen;

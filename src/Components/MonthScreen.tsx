@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import DayMonth from "./DayMonth";
 import { useSwipeable } from "react-swipeable";
+import { ScreenStore } from "../store/screen";
+import { observer } from "mobx-react-lite";
 
 const StyledWrapper = styled.div`
   display: grid;
@@ -10,28 +12,41 @@ const StyledWrapper = styled.div`
   grid-row-gap: 2px;
   height: 100%; // 45px - это высота шапки margin + padding
 `;
-interface IMonthScreenProps {
-  date: Date;
-  setDate: (date: Date) => void;
-}
-const MonthScreen = ({ date, setDate }: IMonthScreenProps) => {
+
+const MonthScreen = observer(() => {
   //* при обновлении date компонент будет перерисован
   //* currentMonth nextMont daysInMonth будут рассчитаны заново
-  const currentMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-  const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+  const currentMonth = new Date(
+    ScreenStore.date.getFullYear(),
+    ScreenStore.date.getMonth(),
+    1
+  );
+  const nextMonth = new Date(
+    ScreenStore.date.getFullYear(),
+    ScreenStore.date.getMonth() + 1,
+    1
+  );
   const daysInMonth = Math.round(
     (Number(nextMonth) - Number(currentMonth)) / 1000 / 3600 / 24
   );
 
   const swipeDate = useSwipeable({
     onSwipedLeft: () => {
-      setDate(
-        new Date(date.getFullYear(), date.getMonth() - 1, date.getDate())
+      ScreenStore.setDate(
+        new Date(
+          ScreenStore.date.getFullYear(),
+          ScreenStore.date.getMonth() - 1,
+          ScreenStore.date.getDate()
+        )
       );
     },
     onSwipedRight: () => {
-      setDate(
-        new Date(date.getFullYear(), date.getMonth() + 1, date.getDate())
+      ScreenStore.setDate(
+        new Date(
+          ScreenStore.date.getFullYear(),
+          ScreenStore.date.getMonth() + 1,
+          ScreenStore.date.getDate()
+        )
       );
     },
     swipeDuration: 500,
@@ -51,11 +66,10 @@ const MonthScreen = ({ date, setDate }: IMonthScreenProps) => {
               currentMonth.getDate() + index
             )
           }
-          setDate={setDate}
         />
       ))}
-      <DayMonth date='other' startColumn={35 - daysInMonth} setDate={setDate} />
+      <DayMonth date='other' startColumn={35 - daysInMonth} />
     </StyledWrapper>
   );
-};
+});
 export default MonthScreen;

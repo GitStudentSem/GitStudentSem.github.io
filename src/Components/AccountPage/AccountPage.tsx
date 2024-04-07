@@ -8,7 +8,7 @@ import Attention from "./Attention";
 import ThemeControls from "./ThemeControls";
 import ViewControl from "./ViewControl";
 import Login from "./Login";
-import user from "../../store/user";
+import { UserStore } from "../../store/user";
 import { observer } from "mobx-react-lite";
 import { screenSize } from "../../scripts/screens";
 
@@ -99,7 +99,7 @@ const AccountPage = observer(() => {
 
   const logOut = () => {
     window.localStorage.removeItem("token");
-    user.logout();
+    UserStore.logout();
   };
 
   return (
@@ -114,9 +114,9 @@ const AccountPage = observer(() => {
 
       <StyledMain>
         <StyledFormsWrapper>
-          {user.isAuth ? (
+          {UserStore.isAuth ? (
             <StyledHelloWrapper>
-              <StyledHelloBlock>привет, {user.name}</StyledHelloBlock>
+              <StyledHelloBlock>привет, {UserStore.name}</StyledHelloBlock>
               <StyledButton onClick={logOut}>Выйти из аккаунта</StyledButton>
             </StyledHelloWrapper>
           ) : (

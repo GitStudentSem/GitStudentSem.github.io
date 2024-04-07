@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 
-class UserStore {
+class User {
   name: string;
   isAuth: boolean;
 
@@ -24,4 +24,4 @@ class UserStore {
   }
 }
 
-export default new UserStore();
+export const UserStore = new User();

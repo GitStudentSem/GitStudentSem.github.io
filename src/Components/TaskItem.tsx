@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { AiFillDelete, AiFillStar } from "react-icons/ai";
 import axios from "../axios";
 import { observer } from "mobx-react-lite";
-import user from "../store/user";
+import { UserStore } from "../store/user";
 import { setStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { ITask } from "../store/tasks";
@@ -61,7 +61,7 @@ interface ITaskItemProps {
 const TaskItem = observer(
   ({ taskItem, index, tasksOnDay, setTasksOnDay, date }: ITaskItemProps) => {
     const changeIsImportant = async () => {
-      if (user.isAuth) {
+      if (UserStore.isAuth) {
         try {
           const { data } = await axios.patch("/tasks/isImportant", {
             dateKey: transformDateToString(date),
@@ -83,7 +83,7 @@ const TaskItem = observer(
     };
 
     const deleteTask = async () => {
-      if (user.isAuth) {
+      if (UserStore.isAuth) {
         try {
           const { data } = await axios.patch("/tasks/delete", {
             dateKey: transformDateToString(date),

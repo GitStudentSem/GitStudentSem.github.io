@@ -2,17 +2,21 @@ import { makeAutoObservable } from "mobx";
 
 class Screen {
   isMonth: boolean;
-  // date: Date;
+  date: Date;
 
   constructor() {
     this.isMonth = false;
-    // this.date = new Date();
+    this.date = new Date();
 
     makeAutoObservable(this);
   }
 
   setIsMonth(isMonth: boolean) {
     this.isMonth = isMonth;
+  }
+
+  setDate(date: Date) {
+    this.date = date;
   }
 }
 

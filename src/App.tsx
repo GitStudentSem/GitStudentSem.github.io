@@ -1,5 +1,5 @@
 import Main from "./Components/Main";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
 import AccountPage from "./Components/AccountPage/AccountPage";
@@ -9,8 +9,9 @@ import { checkSizeLocalStorage } from "./scripts/storageWorker/checkSizeLocalSto
 import { observer } from "mobx-react-lite";
 import { PaletteType, ColorThemeStore } from "./store/colorTheme";
 import { LSGetPalette } from "./scripts/storageWorker/LSPalette";
-import user from "./store/user";
+import { UserStore } from "./store/user";
 import { logError } from "./scripts/errorLog";
+import { TasksStore } from "./store/tasks";
 
 const StyledApp = styled.div<PaletteType>`
   display: flex;
@@ -26,8 +27,6 @@ const StyledApp = styled.div<PaletteType>`
 `;
 
 const App = observer(() => {
-  const [date, setDate] = useState<Date>(new Date());
-
   const handleResize = useCallback(() => {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
@@ -50,27 +49,29 @@ const App = observer(() => {
         return console.error(data.message);
       }
 
-      user.login(data.fullName);
+      UserStore.login(data.fullName);
+      TasksStore.setTasksfromDB();
     } catch (error) {
       logError(error);
     }
   }, []);
 
   useEffect(() => {
-    handleResize();
-
     authMe();
 
-    window.addEventListener("resize", handleResize);
     checkSizeLocalStorage();
 
     ColorThemeStore.setIsNeedSaveColor(!!LSGetPalette());
     ColorThemeStore.isNeedSaveColor
       ? ColorThemeStore.setPalette(LSGetPalette())
       : ColorThemeStore.generateColor();
+  }, [authMe]);
 
+  useEffect(() => {
+    handleResize();
+    window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [handleResize, authMe]);
+  }, [handleResize]);
 
   return (
     <StyledApp
@@ -78,7 +79,7 @@ const App = observer(() => {
       to={ColorThemeStore.palette.to}
     >
       <Routes>
-        <Route path='/' element={<Main date={date} setDate={setDate} />} />
+        <Route path='/' element={<Main />} />
         <Route path='/account' element={<AccountPage />} />
         <Route path='*' element={<NotFoundPage />} />
         {/* <Route path='/login' element={<Login />} /> */}

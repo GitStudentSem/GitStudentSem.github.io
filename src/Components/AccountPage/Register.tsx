@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { ChangeEvent, useState } from "react";
 import { RiLoginCircleFill } from "react-icons/ri";
 import Title from "./Title";
-import user from "../../store/user";
+import { UserStore } from "../../store/user";
 import { observer } from "mobx-react-lite";
 import { logError } from "../../scripts/errorLog";
 
@@ -80,7 +80,7 @@ const Login = observer(
           return setErrorMessage(data.message);
         }
         window.localStorage.setItem("token", data.token);
-        user.login(data.fullName);
+        UserStore.login(data.fullName);
       } catch (error) {
         logError(error);
       }

@@ -63,34 +63,38 @@ const StyledButtons = styled.div`
   }
 `;
 
-interface INavbarProps {
-  date: Date;
-  setDate: (date: Date) => void;
-}
-const Navbar = observer(({ date, setDate }: INavbarProps) => {
+const Navbar = observer(() => {
   return (
     <StyledNavbar>
       <NavigationFromDate
         setPrevDate={() => {
-          setDate(
-            new Date(date.getFullYear(), date.getMonth() - 1, date.getDate())
+          ScreenStore.setDate(
+            new Date(
+              ScreenStore.date.getFullYear(),
+              ScreenStore.date.getMonth() - 1,
+              ScreenStore.date.getDate()
+            )
           );
         }}
         setNextDate={() => {
-          setDate(
-            new Date(date.getFullYear(), date.getMonth() + 1, date.getDate())
+          ScreenStore.setDate(
+            new Date(
+              ScreenStore.date.getFullYear(),
+              ScreenStore.date.getMonth() + 1,
+              ScreenStore.date.getDate()
+            )
           );
         }}
       >
         <p style={{ color: "rgba(255, 255, 255, 0.85)" }}>
-          {monthNames[date.getMonth()]}
+          {monthNames[ScreenStore.date.getMonth()]}
         </p>
       </NavigationFromDate>
 
       <StyledButtons>
         <StyledButton
           onClick={() => {
-            setDate(new Date());
+            ScreenStore.setDate(new Date());
           }}
           title='Перейти к сегодняшнему дню'
         >
@@ -127,17 +131,25 @@ const Navbar = observer(({ date, setDate }: INavbarProps) => {
 
       <NavigationFromDate
         setPrevDate={() => {
-          setDate(
-            new Date(date.getFullYear() - 1, date.getMonth(), date.getDate())
+          ScreenStore.setDate(
+            new Date(
+              ScreenStore.date.getFullYear() - 1,
+              ScreenStore.date.getMonth(),
+              ScreenStore.date.getDate()
+            )
           );
         }}
         setNextDate={() => {
-          setDate(
-            new Date(date.getFullYear() + 1, date.getMonth(), date.getDate())
+          ScreenStore.setDate(
+            new Date(
+              ScreenStore.date.getFullYear() + 1,
+              ScreenStore.date.getMonth(),
+              ScreenStore.date.getDate()
+            )
           );
         }}
       >
-        <p>{date.getFullYear()}</p>
+        <p>{ScreenStore.date.getFullYear()}</p>
       </NavigationFromDate>
     </StyledNavbar>
   );

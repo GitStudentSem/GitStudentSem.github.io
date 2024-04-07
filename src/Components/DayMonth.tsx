@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { FaRegCalendar } from "react-icons/fa";
 import { MdOutlineWorkOutline } from "react-icons/md";
@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { observer } from "mobx-react-lite";
-import user from "../store/user";
 import { TasksStore } from "../store/tasks";
 import { ScreenStore } from "../store/screen";
 
@@ -53,44 +52,39 @@ const IconWrapper = styled.div`
 `;
 interface IDayMonthProps {
   date: Date | "other";
-  setDate: (date: Date) => void;
   startColumn?: number;
 }
-const DayMonth = observer(({ date, startColumn, setDate }: IDayMonthProps) => {
+const DayMonth = observer(({ date, startColumn }: IDayMonthProps) => {
   const [countTasksOnDay, setCountTasksOnDay] = useState(0);
-  const { isAuth } = user;
+  const { tasksFromDB } = TasksStore;
+
+  const getTasksOnDay = useCallback(() => {
+    const currentTasks = tasksFromDB.find((day) => {
+      if (day.dateKey === "other") {
+        return day.dateKey === date;
+      }
+      return transformDateToString(day.dateKey) === transformDateToString(date);
+    });
+
+    if (currentTasks) {
+      setCountTasksOnDay(currentTasks.tasks.length);
+    }
+  }, [date, tasksFromDB]);
 
   useEffect(() => {
-    if (isAuth) {
-      const getTasksOnDay = () => {
-        if (TasksStore.tasksFromDB.length) {
-          const currentTasks = TasksStore.tasksFromDB.find((day) => {
-            if (day.dateKey === "other") {
-              return day.dateKey === date;
-            }
-            return (
-              transformDateToString(day.dateKey) === transformDateToString(date)
-            );
-          });
-
-          if (currentTasks) {
-            setCountTasksOnDay(currentTasks.tasks.length);
-          }
-        }
-      };
-
+    if (tasksFromDB.length) {
       getTasksOnDay();
     } else {
       setCountTasksOnDay(getStorageTasksList(date).length);
     }
-  }, [date, isAuth]);
+  }, [date, getTasksOnDay, tasksFromDB]);
 
   return (
     <StyledDay
       $startColumn={startColumn || 0}
       onClick={() => {
         ScreenStore.setIsMonth(false);
-        setDate(date === "other" ? new Date() : date);
+        ScreenStore.setDate(date === "other" ? new Date() : date);
       }}
       $isToday={
         transformDateToString(date) === transformDateToString(new Date())
