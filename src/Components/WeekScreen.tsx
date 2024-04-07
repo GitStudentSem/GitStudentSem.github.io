@@ -25,9 +25,9 @@ const StyledWrapper = styled.div`
 interface IWeekScreenProps {
   date: Date;
   setDate: (date: Date) => void;
-  tasksfromDB: TasksFromDBType[];
+  tasksFromDB: TasksFromDBType[];
 }
-const WeekScreen = ({ date, tasksfromDB, setDate }: IWeekScreenProps) => {
+const WeekScreen = ({ date, tasksFromDB, setDate }: IWeekScreenProps) => {
   // choose the screen size
   const [elementsCount, setElementsCount] = useState(handleResize());
   // choose the screen size
@@ -88,11 +88,11 @@ const WeekScreen = ({ date, tasksfromDB, setDate }: IWeekScreenProps) => {
               date.getDate() + index
             )
           }
-          tasksfromDB={tasksfromDB}
+          tasksFromDB={tasksFromDB}
         />
       ))}
 
-      <Day date='other' tasksfromDB={tasksfromDB} />
+      <Day date='other' tasksFromDB={tasksFromDB} />
     </StyledWrapper>
   );
 };

@@ -49,6 +49,7 @@ const App = observer(() => {
       if (!response.ok) {
         return console.error(data.message);
       }
+
       user.login(data.fullName);
     } catch (error) {
       logError(error);
@@ -67,6 +68,8 @@ const App = observer(() => {
     colorTheme.isNeedSaveColor
       ? colorTheme.setPalette(LSGetPalette())
       : colorTheme.generateColor();
+
+    return () => window.removeEventListener("resize", handleResize);
   }, [handleResize, authMe]);
 
   return (

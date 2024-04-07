@@ -68,13 +68,14 @@ const TaskItem = observer(
             isImportant: !taskItem.isImportant,
             id: taskItem.id,
           });
-          console.log("data", data);
           setTasksOnDay(data);
         } catch (error) {
           logError(error);
         }
       } else {
-        const copyTasks = [...tasksOnDay];
+        const copyTasks = [...tasksOnDay].map((task) => {
+          return { ...task };
+        });
         copyTasks[index].isImportant = !copyTasks[index].isImportant;
         setTasksOnDay(copyTasks);
         setStorageTasksList(copyTasks, date);
@@ -94,7 +95,11 @@ const TaskItem = observer(
           logError(error);
         }
       } else {
-        const copyTasks = [...tasksOnDay];
+        const copyTasks = [
+          ...tasksOnDay.map((task) => {
+            return { ...task };
+          }),
+        ];
         copyTasks.splice(index, 1);
 
         setTasksOnDay(copyTasks);

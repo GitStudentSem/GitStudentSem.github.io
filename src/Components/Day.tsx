@@ -9,28 +9,28 @@ import { observer } from "mobx-react-lite";
 import user from "../store/user";
 import { ITask, TasksFromDBType } from "./Main";
 
-type StyledDayType = { isToday: boolean };
+type StyledDayType = { $isToday: boolean };
 const StyledDay = styled.div<StyledDayType>`
   position: relative;
   width: 100%;
   border-radius: 10px;
   height: 100%;
   background-color: ${(props) =>
-    props.isToday ? "rgba(255, 255, 255, 0.35)" : "rgba(255, 255, 255, 0.2)"};
+    props.$isToday ? "rgba(255, 255, 255, 0.35)" : "rgba(255, 255, 255, 0.2)"};
   padding: 5px;
   overflow: hidden;
 `;
 
 interface IDayProps {
   date: Date | "other";
-  tasksfromDB: TasksFromDBType[];
+  tasksFromDB: TasksFromDBType[];
 }
-const Day = observer(({ date, tasksfromDB }: IDayProps) => {
+const Day = observer(({ date, tasksFromDB }: IDayProps) => {
   const [tasksOnDay, setTasksOnDay] = useState<ITask[]>([]);
 
   const fetchData = useCallback(async () => {
-    if (tasksfromDB.length) {
-      const currentTasks = tasksfromDB.find((day) => {
+    if (tasksFromDB.length) {
+      const currentTasks = tasksFromDB.find((day) => {
         if (day.dateKey === "other") {
           return day.dateKey === date;
         }
@@ -42,7 +42,7 @@ const Day = observer(({ date, tasksfromDB }: IDayProps) => {
         setTasksOnDay([...currentTasks.tasks]);
       }
     }
-  }, [date, tasksfromDB]);
+  }, [date, tasksFromDB]);
 
   useEffect(() => {
     if (user.isAuth) {
@@ -54,7 +54,7 @@ const Day = observer(({ date, tasksfromDB }: IDayProps) => {
 
   return (
     <StyledDay
-      isToday={
+      $isToday={
         transformDateToString(date) === transformDateToString(new Date())
       }
     >

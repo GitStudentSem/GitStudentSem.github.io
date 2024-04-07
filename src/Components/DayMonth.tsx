@@ -10,10 +10,9 @@ import user from "../store/user";
 import { TasksFromDBType } from "./Main";
 
 type IStyledDay = {
-  isToday: boolean;
-
-  isDayOff: boolean;
-  startColumn: number;
+  $isToday: boolean;
+  $isDayOff: boolean;
+  $startColumn: number;
 };
 const StyledDay = styled.button<IStyledDay>`
   display: flex;
@@ -22,13 +21,13 @@ const StyledDay = styled.button<IStyledDay>`
   border-radius: 10px;
   padding: 1px;
   background-color: ${(props) =>
-    props.isToday
+    props.$isToday
       ? "rgba(255, 255, 255, 0.4)"
-      : props.isDayOff
+      : props.$isDayOff
       ? "rgba(255, 255, 255, 0.3)"
       : "rgba(255, 255, 255, 0.2)"};
   &:last-child {
-    grid-column-start: ${(props) => 8 - props.startColumn};
+    grid-column-start: ${(props) => 8 - props.$startColumn};
     grid-column-end: 8;
   }
 `;
@@ -46,7 +45,7 @@ const StyledCountTasks = styled.div`
   bottom: 11px;
   width: 100%;
 `;
-const StyledIconWrapper = styled.div`
+const IconWrapper = styled.div`
   position: relative;
   height: min-content;
   width: 100%;
@@ -55,19 +54,20 @@ interface IDayMonthProps {
   date: Date | "other";
   setDate: (date: Date) => void;
   setIsMonth: (isMonth: boolean) => void;
-  tasksfromDB: TasksFromDBType[];
+  tasksFromDB: TasksFromDBType[];
   startColumn?: number;
 }
 const DayMonth = observer(
-  ({ date, startColumn, setIsMonth, setDate, tasksfromDB }: IDayMonthProps) => {
+  ({ date, startColumn, setIsMonth, setDate, tasksFromDB }: IDayMonthProps) => {
     const [countTasksOnDay, setCountTasksOnDay] = useState(0);
+    const { isAuth } = user;
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-      console.log("user.isAuth", user.isAuth);
-      if (user.isAuth) {
+      if (isAuth) {
         const getTasksOnDay = () => {
-          if (tasksfromDB.length) {
-            const currentTasks = tasksfromDB.find((day) => {
+          if (tasksFromDB.length) {
+            const currentTasks = tasksFromDB.find((day) => {
               if (day.dateKey === "other") {
                 return day.dateKey === date;
               }
@@ -87,31 +87,31 @@ const DayMonth = observer(
       } else {
         setCountTasksOnDay(getStorageTasksList(date).length);
       }
-    }, [date, tasksfromDB]);
+    }, [date, isAuth]);
 
     return (
       <StyledDay
-        startColumn={startColumn || 0}
+        $startColumn={startColumn || 0}
         onClick={() => {
           setIsMonth(false);
           setDate(date === "other" ? new Date() : date);
         }}
-        isToday={
+        $isToday={
           transformDateToString(date) === transformDateToString(new Date())
         }
-        isDayOff={
+        $isDayOff={
           date !== "other" && (date.getDay() === 0 || date.getDay() === 6)
         }
       >
-        <StyledIconWrapper>
+        <IconWrapper>
           <FaRegCalendar size={30} />
           <StyledDate>{date !== "other" ? date.getDate() : "..."}</StyledDate>
-        </StyledIconWrapper>
-        <StyledIconWrapper>
+        </IconWrapper>
+        <IconWrapper>
           <MdOutlineWorkOutline size={35} />
 
           <StyledCountTasks>{countTasksOnDay}</StyledCountTasks>
-        </StyledIconWrapper>
+        </IconWrapper>
       </StyledDay>
     );
   }

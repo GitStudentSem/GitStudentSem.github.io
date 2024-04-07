@@ -1,10 +1,13 @@
 import { makeAutoObservable } from "mobx";
 
 class User {
-  name = "";
-  isAuth = false;
+  name: string;
+  isAuth: boolean;
 
   constructor() {
+    this.name = "";
+    this.isAuth = false;
+
     makeAutoObservable(this);
   }
   async login(name: string) {
@@ -14,6 +17,7 @@ class User {
   logout() {
     this.name = "";
     this.isAuth = false;
+    console.log("3", 3);
   }
   getIsAuth() {
     return this.isAuth;

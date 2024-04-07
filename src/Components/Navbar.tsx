@@ -23,7 +23,7 @@ const StyledNavbar = styled.div`
 `;
 
 interface IStyledButton {
-  isMonth?: boolean;
+  $isMonth?: boolean;
 }
 
 const StyledButton = styled.button<IStyledButton>`
@@ -39,7 +39,7 @@ const StyledButton = styled.button<IStyledButton>`
   padding: 5px;
   border-radius: 5px;
   background-color: ${(props) =>
-    props.isMonth ? "rgba(255, 255, 255, 0.2)" : "transparent"};
+    props.$isMonth ? "rgba(255, 255, 255, 0.2)" : "transparent"};
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
   }
@@ -109,7 +109,7 @@ const Navbar = ({ date, setDate, setIsMonth, isMonth }: INavbarProps) => {
               setIsMonth(false);
             }}
             title='Отображать дни'
-            isMonth={!isMonth}
+            $isMonth={!isMonth}
           >
             <TfiLayoutGrid2Alt size={25} />
           </StyledButton>
@@ -118,7 +118,7 @@ const Navbar = ({ date, setDate, setIsMonth, isMonth }: INavbarProps) => {
               setIsMonth(true);
             }}
             title='Отображать месяца'
-            isMonth={isMonth}
+            $isMonth={isMonth}
           >
             <TfiLayoutGrid3Alt size={25} />
           </StyledButton>

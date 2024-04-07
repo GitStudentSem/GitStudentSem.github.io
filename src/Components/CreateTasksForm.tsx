@@ -75,25 +75,25 @@ const CreateTasksForm = observer(
       setStorageInputText(value, date);
     };
     const addTask = async () => {
+      const task = {
+        text,
+        isImportant,
+        id: `${transformDateToString(date)}_${text}_${Math.random()}`,
+        dateKey: transformDateToString(date),
+      };
+
       if (user.isAuth) {
         try {
-          const { data } = await axios.post("/tasks/add", {
-            text,
-            isImportant,
-            dateKey: transformDateToString(date),
-          });
+          const { data }: { data: ITask[] } = await axios.post(
+            "/tasks/add",
+            task
+          );
 
           setTasksOnDay(data);
         } catch (error) {
           logError(error);
         }
       } else {
-        const task = {
-          text,
-          isImportant,
-          id: `${transformDateToString(date)}_${text}_${Math.random()}`,
-        };
-
         setTasksOnDay((prev: ITask[]) => {
           const copy: ITask[] = [...prev, task];
           setStorageTasksList(copy, date);

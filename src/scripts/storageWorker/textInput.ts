@@ -15,5 +15,7 @@ export const setStorageInputText = (
 };
 
 export const getStorageInputText = (date: Date | "other") => {
-  return JSON.parse(localStorage.getItem(nameInput(date)) || "");
+  const savedText = localStorage.getItem(nameInput(date));
+  if (!savedText) return "";
+  return JSON.parse(savedText);
 };

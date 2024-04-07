@@ -81,7 +81,7 @@ const StyledIconMonth = styled(TfiLayoutGrid3Alt)`
 `;
 
 interface IStyledIsDev {
-  isDev: boolean;
+  $isDev: boolean;
 }
 const StyledIsDev = styled.div<IStyledIsDev>`
   z-index: 100;
@@ -93,10 +93,10 @@ const StyledIsDev = styled.div<IStyledIsDev>`
   text-align: center;
   left: 0;
   top: 0;
-  width: ${(props) => (props.isDev ? "100%" : "0px")};
-  height: ${(props) => (props.isDev ? "100%" : "0px")};
+  width: ${(props) => (props.$isDev ? "100%" : "0px")};
+  height: ${(props) => (props.$isDev ? "100%" : "0px")};
   background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(${(props) => (props.isDev ? "3px" : "0px")});
+  backdrop-filter: blur(${(props) => (props.$isDev ? "3px" : "0px")});
 `;
 
 type ViewControlPropsType = {
@@ -174,7 +174,7 @@ const ViewControl = ({ setColorsTheme, colorsTheme }: ViewControlPropsType) => {
           <StyledText>Месяца</StyledText>
         </StyledButtonWrapper>
       </StyledButtonsWrapper>
-      <StyledIsDev isDev>
+      <StyledIsDev $isDev>
         <p>Скоро появится</p>
       </StyledIsDev>
     </StyledViewControls>

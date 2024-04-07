@@ -15,13 +15,13 @@ interface IMonthScreenProps {
   date: Date;
   setDate: (date: Date) => void;
   setIsMonth: (isMonth: boolean) => void;
-  tasksfromDB: TasksFromDBType[];
+  tasksFromDB: TasksFromDBType[];
 }
 const MonthScreen = ({
   date,
   setIsMonth,
   setDate,
-  tasksfromDB,
+  tasksFromDB,
 }: IMonthScreenProps) => {
   //* при обновлении date компонент будет перерисован
   //* currentMonth nextMont daysInMonth будут рассчитаны заново
@@ -61,7 +61,7 @@ const MonthScreen = ({
           }
           setDate={setDate}
           setIsMonth={setIsMonth}
-          tasksfromDB={tasksfromDB}
+          tasksFromDB={tasksFromDB}
         />
       ))}
       <DayMonth
@@ -69,7 +69,7 @@ const MonthScreen = ({
         startColumn={35 - daysInMonth}
         setDate={setDate}
         setIsMonth={setIsMonth}
-        tasksfromDB={tasksfromDB}
+        tasksFromDB={tasksFromDB}
       />
     </StyledWrapper>
   );
