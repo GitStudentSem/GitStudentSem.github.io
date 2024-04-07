@@ -52,14 +52,14 @@ const DayMonth = observer(
 
     useEffect(() => {
       if (user.isAuth) {
-        const fetchData = () => {
+        const getTasksOnDay = () => {
           if (tasksfromDB.length) {
             const currentTasks = tasksfromDB.find((day) => {
-              if (day.calendarDate === "other") {
-                return day.calendarDate === date;
+              if (day.dateKey === "other") {
+                return day.dateKey === date;
               }
               return (
-                transformDateToString(day.calendarDate) ===
+                transformDateToString(day.dateKey) ===
                 transformDateToString(date)
               );
             });
@@ -69,7 +69,7 @@ const DayMonth = observer(
           }
         };
 
-        fetchData();
+        getTasksOnDay();
       } else {
         setCountTasksOnDay(getStorageTasksList(date).length);
       }

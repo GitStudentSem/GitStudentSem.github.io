@@ -14,6 +14,7 @@ import axios from "../axios";
 import { observer } from "mobx-react-lite";
 import user from "../store/user";
 import { setStorageTasksList } from "../scripts/storageWorker/tasks";
+import { transformDateToString } from "../scripts/transformDateToString";
 
 const StyledForm = styled.form`
   display: flex;
@@ -68,17 +69,19 @@ const CreateTasksForm = observer(({ date, setTasksOnDay }) => {
   };
   const addTask = async (task) => {
     if (user.isAuth) {
-      await axios.post("/tasks", {
-        text,
-        isImportant,
-        date: date.toString(),
-      });
-      setTasksOnDay((prev) => {
-        return [...prev, task];
-      });
+      try {
+        const { data } = await axios.post("/tasks/add", {
+          text,
+          isImportant,
+          dateKey: transformDateToString(date),
+        });
+
+        setTasksOnDay(data);
+      } catch (error) {
+        console.error(error.response.data.message);
+      }
     } else {
       setTasksOnDay((prev) => {
-        console.log("first");
         setStorageTasksList([...prev, task], date);
         return [...prev, task];
       });

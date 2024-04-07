@@ -5,6 +5,7 @@ import axios from "../axios";
 import { observer } from "mobx-react-lite";
 import user from "../store/user";
 import { setStorageTasksList } from "../scripts/storageWorker/tasks";
+import { transformDateToString } from "../scripts/transformDateToString";
 
 const StyledTask = styled.li`
   display: flex;
@@ -53,33 +54,42 @@ const StyledButton = styled.button`
 const TaskItem = observer(
   ({ taskItem, index, tasksOnDay, setTasksOnDay, date }) => {
     const changeIsImportant = async () => {
-      const copyTasks = [...tasksOnDay];
-      copyTasks[index].isImportant = !copyTasks[index].isImportant;
-      setTasksOnDay(copyTasks);
-
       if (user.isAuth) {
-        await axios.patch("/tasks/isImportant", {
-          isImportant: taskItem.isImportant,
-          text: taskItem.text,
-          //   _id: taskItem._id,
-        });
+        try {
+          const { data } = await axios.patch("/tasks/isImportant", {
+            dateKey: transformDateToString(date),
+            isImportant: taskItem.isImportant,
+            id: taskItem.id,
+          });
+          setTasksOnDay(data);
+        } catch (error) {
+          console.error(error.response.data.message);
+        }
       } else {
+        const copyTasks = [...tasksOnDay];
+        copyTasks[index].isImportant = !copyTasks[index].isImportant;
+        setTasksOnDay(copyTasks);
         setStorageTasksList(copyTasks, date);
       }
     };
 
     const deleteTask = async () => {
-      const copyTasks = [...tasksOnDay];
-      copyTasks.splice(index, 1);
-
-      setTasksOnDay(copyTasks);
-
       if (user.isAuth) {
-        await axios.patch("/tasks/delete", {
-          date: date.toString(),
-          text: taskItem.text,
-        });
+        try {
+          const { data } = await axios.patch("/tasks/delete", {
+            dateKey: transformDateToString(date),
+            id: taskItem.id,
+          });
+
+          setTasksOnDay(data);
+        } catch (error) {
+          console.error(error.response.data.message);
+        }
       } else {
+        const copyTasks = [...tasksOnDay];
+        copyTasks.splice(index, 1);
+
+        setTasksOnDay(copyTasks);
         setStorageTasksList(copyTasks, date);
       }
     };

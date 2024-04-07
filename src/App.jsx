@@ -6,7 +6,6 @@ import AccountPage from "./Components/AccountPage/AccountPage";
 // import PrivateRoute from './Components/PrivateRoute';
 import NotFoundPage from "./Components/NotFoundPage";
 import { checkSizeLocalStorage } from "./scripts/storageWorker/checkSizeLocalStorage";
-import axios from "./axios";
 import { observer } from "mobx-react-lite";
 import colorTheme from "./store/colorTheme";
 import { LSGetPalette } from "./scripts/storageWorker/LSPalette";
@@ -47,12 +46,25 @@ const App = observer(() => {
   }, []);
 
   const authMe = useCallback(async () => {
-    const token = window.localStorage.getItem("token");
-    if (token) {
-      const { data } = await axios.get("/auth/me");
-      if (data) {
-        user.login(data.userData.fullName);
+    try {
+      const token = window.localStorage.getItem("token");
+      if (!token) return;
+
+      const response = await fetch("http://localhost:3333/auth/me", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        return console.error(data.message);
       }
+      user.login(data.fullName);
+    } catch (error) {
+      error.message && console.error(error.message);
+      console.error(error);
     }
   }, []);
 

@@ -23,18 +23,22 @@ const Main = observer(({ date, monthNames, setDate }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get("/tasks");
-      const selectedFields = [];
+      try {
+        const { data } = await axios.get("/tasks");
+        const selectedFields = [];
+        console.log("data", data);
+        for (const day of data) {
+          const { dateKey, tasks } = day;
 
-      for (const day of data) {
-        const { calendarDate, tasks } = day;
-        selectedFields.push({
-          calendarDate:
-            calendarDate !== "other" ? new Date(calendarDate) : "other",
-          tasks,
-        });
+          selectedFields.push({
+            calendarDate: dateKey !== "other" ? new Date(dateKey) : "other",
+            tasks,
+          });
+        }
+        setTaksFromDB(selectedFields);
+      } catch (error) {
+        console.error(error.response.data.message);
       }
-      setTaksFromDB(selectedFields);
     };
 
     fetchData();
