@@ -7,7 +7,8 @@ import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { observer } from "mobx-react-lite";
 import user from "../store/user";
-import { ITask, TasksFromDBType } from "./Main";
+import { TasksStore } from "../store/tasks";
+import { ITask } from "../store/tasks";
 
 type StyledDayType = { $isToday: boolean };
 const StyledDay = styled.div<StyledDayType>`
@@ -23,10 +24,10 @@ const StyledDay = styled.div<StyledDayType>`
 
 interface IDayProps {
   date: Date | "other";
-  tasksFromDB: TasksFromDBType[];
 }
-const Day = observer(({ date, tasksFromDB }: IDayProps) => {
+const Day = observer(({ date }: IDayProps) => {
   const [tasksOnDay, setTasksOnDay] = useState<ITask[]>([]);
+  const { tasksFromDB } = TasksStore;
 
   const fetchData = useCallback(async () => {
     if (tasksFromDB.length) {

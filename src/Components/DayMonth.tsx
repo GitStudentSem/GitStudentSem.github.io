@@ -7,7 +7,8 @@ import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { observer } from "mobx-react-lite";
 import user from "../store/user";
-import { TasksFromDBType } from "./Main";
+import { TasksStore } from "../store/tasks";
+import { ScreenStore } from "../store/screen";
 
 type IStyledDay = {
   $isToday: boolean;
@@ -53,68 +54,62 @@ const IconWrapper = styled.div`
 interface IDayMonthProps {
   date: Date | "other";
   setDate: (date: Date) => void;
-  setIsMonth: (isMonth: boolean) => void;
-  tasksFromDB: TasksFromDBType[];
   startColumn?: number;
 }
-const DayMonth = observer(
-  ({ date, startColumn, setIsMonth, setDate, tasksFromDB }: IDayMonthProps) => {
-    const [countTasksOnDay, setCountTasksOnDay] = useState(0);
-    const { isAuth } = user;
+const DayMonth = observer(({ date, startColumn, setDate }: IDayMonthProps) => {
+  const [countTasksOnDay, setCountTasksOnDay] = useState(0);
+  const { isAuth } = user;
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-      if (isAuth) {
-        const getTasksOnDay = () => {
-          if (tasksFromDB.length) {
-            const currentTasks = tasksFromDB.find((day) => {
-              if (day.dateKey === "other") {
-                return day.dateKey === date;
-              }
-              return (
-                transformDateToString(day.dateKey) ===
-                transformDateToString(date)
-              );
-            });
-
-            if (currentTasks) {
-              setCountTasksOnDay(currentTasks.tasks.length);
+  useEffect(() => {
+    if (isAuth) {
+      const getTasksOnDay = () => {
+        if (TasksStore.tasksFromDB.length) {
+          const currentTasks = TasksStore.tasksFromDB.find((day) => {
+            if (day.dateKey === "other") {
+              return day.dateKey === date;
             }
+            return (
+              transformDateToString(day.dateKey) === transformDateToString(date)
+            );
+          });
+
+          if (currentTasks) {
+            setCountTasksOnDay(currentTasks.tasks.length);
           }
-        };
+        }
+      };
 
-        getTasksOnDay();
-      } else {
-        setCountTasksOnDay(getStorageTasksList(date).length);
+      getTasksOnDay();
+    } else {
+      setCountTasksOnDay(getStorageTasksList(date).length);
+    }
+  }, [date, isAuth]);
+
+  return (
+    <StyledDay
+      $startColumn={startColumn || 0}
+      onClick={() => {
+        ScreenStore.setIsMonth(false);
+        setDate(date === "other" ? new Date() : date);
+      }}
+      $isToday={
+        transformDateToString(date) === transformDateToString(new Date())
       }
-    }, [date, isAuth]);
+      $isDayOff={
+        date !== "other" && (date.getDay() === 0 || date.getDay() === 6)
+      }
+    >
+      <IconWrapper>
+        <FaRegCalendar size={30} />
+        <StyledDate>{date !== "other" ? date.getDate() : "..."}</StyledDate>
+      </IconWrapper>
+      <IconWrapper>
+        <MdOutlineWorkOutline size={35} />
 
-    return (
-      <StyledDay
-        $startColumn={startColumn || 0}
-        onClick={() => {
-          setIsMonth(false);
-          setDate(date === "other" ? new Date() : date);
-        }}
-        $isToday={
-          transformDateToString(date) === transformDateToString(new Date())
-        }
-        $isDayOff={
-          date !== "other" && (date.getDay() === 0 || date.getDay() === 6)
-        }
-      >
-        <IconWrapper>
-          <FaRegCalendar size={30} />
-          <StyledDate>{date !== "other" ? date.getDate() : "..."}</StyledDate>
-        </IconWrapper>
-        <IconWrapper>
-          <MdOutlineWorkOutline size={35} />
-
-          <StyledCountTasks>{countTasksOnDay}</StyledCountTasks>
-        </IconWrapper>
-      </StyledDay>
-    );
-  }
-);
+        <StyledCountTasks>{countTasksOnDay}</StyledCountTasks>
+      </IconWrapper>
+    </StyledDay>
+  );
+});
 
 export default DayMonth;

@@ -5,6 +5,8 @@ import { FaUserAlt } from "react-icons/fa";
 import { TfiLayoutGrid2Alt, TfiLayoutGrid3Alt } from "react-icons/tfi";
 import { screenSize } from "../scripts/screens";
 import { monthNames } from "../scripts/montsAndDaysEnum";
+import { ScreenStore } from "../store/screen";
+import { observer } from "mobx-react-lite";
 
 const StyledNavbar = styled.div`
   /* 
@@ -64,10 +66,8 @@ const StyledButtons = styled.div`
 interface INavbarProps {
   date: Date;
   setDate: (date: Date) => void;
-  setIsMonth: (isMonth: boolean) => void;
-  isMonth: boolean;
 }
-const Navbar = ({ date, setDate, setIsMonth, isMonth }: INavbarProps) => {
+const Navbar = observer(({ date, setDate }: INavbarProps) => {
   return (
     <StyledNavbar>
       <NavigationFromDate
@@ -106,19 +106,19 @@ const Navbar = ({ date, setDate, setIsMonth, isMonth }: INavbarProps) => {
         <StyledVisibleTypeWrapper>
           <StyledButton
             onClick={() => {
-              setIsMonth(false);
+              ScreenStore.setIsMonth(false);
             }}
             title='Отображать дни'
-            $isMonth={!isMonth}
+            $isMonth={!ScreenStore.isMonth}
           >
             <TfiLayoutGrid2Alt size={25} />
           </StyledButton>
           <StyledButton
             onClick={() => {
-              setIsMonth(true);
+              ScreenStore.setIsMonth(true);
             }}
             title='Отображать месяца'
-            $isMonth={isMonth}
+            $isMonth={ScreenStore.isMonth}
           >
             <TfiLayoutGrid3Alt size={25} />
           </StyledButton>
@@ -141,5 +141,5 @@ const Navbar = ({ date, setDate, setIsMonth, isMonth }: INavbarProps) => {
       </NavigationFromDate>
     </StyledNavbar>
   );
-};
+});
 export default Navbar;

@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite";
 import user from "../store/user";
 import { setStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
-import { ITask } from "./Main";
+import { ITask } from "../store/tasks";
 import { logError } from "../scripts/errorLog";
 
 const StyledTask = styled.li`

@@ -39,4 +39,4 @@ class ColorTheme {
   }
 }
 
-export default new ColorTheme();
+export const ColorThemeStore = new ColorTheme();

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import TaskItem from "./TaskItem";
-import { ITask } from "./Main";
+import { ITask } from "../store/tasks";
 
 const StyledTasksList = styled.ul`
   list-style-type: none;

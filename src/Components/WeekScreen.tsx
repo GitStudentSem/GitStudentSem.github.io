@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Day from "./Day.js";
 import { screenSize } from "../scripts/screens.js";
 import { useSwipeable } from "react-swipeable";
-import { TasksFromDBType } from "./Main.js";
 
 const StyledWrapper = styled.div`
   display: grid;
@@ -25,9 +24,8 @@ const StyledWrapper = styled.div`
 interface IWeekScreenProps {
   date: Date;
   setDate: (date: Date) => void;
-  tasksFromDB: TasksFromDBType[];
 }
-const WeekScreen = ({ date, tasksFromDB, setDate }: IWeekScreenProps) => {
+const WeekScreen = ({ date, setDate }: IWeekScreenProps) => {
   // choose the screen size
   const [elementsCount, setElementsCount] = useState(handleResize());
   // choose the screen size
@@ -88,11 +86,10 @@ const WeekScreen = ({ date, tasksFromDB, setDate }: IWeekScreenProps) => {
               date.getDate() + index
             )
           }
-          tasksFromDB={tasksFromDB}
         />
       ))}
 
-      <Day date='other' tasksFromDB={tasksFromDB} />
+      <Day date='other' />
     </StyledWrapper>
   );
 };

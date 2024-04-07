@@ -13,9 +13,9 @@ import {
 import axios from "../axios";
 import { observer } from "mobx-react-lite";
 import user from "../store/user";
+import { ITask } from "../store/tasks";
 import { setStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
-import { ITask } from "./Main";
 import { logError } from "../scripts/errorLog";
 
 const StyledForm = styled.form`

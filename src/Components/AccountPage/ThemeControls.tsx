@@ -5,7 +5,7 @@ import { FaRandom } from "react-icons/fa";
 import Title from "./Title";
 import { screenSize } from "../../scripts/screens";
 import { observer } from "mobx-react-lite";
-import colorTheme from "../../store/colorTheme";
+import { ColorThemeStore } from "../../store/colorTheme";
 import {
   LSRemovePalette,
   LSSavePalette,
@@ -127,22 +127,22 @@ const ThemeControls = observer(() => {
   const [isErrorOutside, setIsErrorOutside] = useState(true);
 
   const savePalette = () => {
-    LSSavePalette(colorTheme.palette);
-    colorTheme.setIsNeedSaveColor(true);
+    LSSavePalette(ColorThemeStore.palette);
+    ColorThemeStore.setIsNeedSaveColor(true);
     setCenterColor("");
     setOutsideColor("");
   };
   const forgetPalette = () => {
     LSRemovePalette();
-    colorTheme.setIsNeedSaveColor(false);
-    colorTheme.generateColor();
+    ColorThemeStore.setIsNeedSaveColor(false);
+    ColorThemeStore.generateColor();
     setCenterColor("");
     setOutsideColor("");
   };
   const setUserColors = () => {
-    colorTheme.setPalette({ from: centerColor, to: outsideColor });
-    LSSavePalette(colorTheme.palette);
-    colorTheme.setIsNeedSaveColor(true);
+    ColorThemeStore.setPalette({ from: centerColor, to: outsideColor });
+    LSSavePalette(ColorThemeStore.palette);
+    ColorThemeStore.setIsNeedSaveColor(true);
   };
 
   useEffect(() => {
@@ -165,7 +165,7 @@ const ThemeControls = observer(() => {
           >
             <StyledIconSave
               fill={
-                colorTheme.isNeedSaveColor
+                ColorThemeStore.isNeedSaveColor
                   ? "rgba(255, 255, 255, 1)"
                   : "rgba(255, 255, 255, 0.2)"
               }
@@ -182,7 +182,7 @@ const ThemeControls = observer(() => {
           >
             <StyledIconRandom
               fill={
-                colorTheme.isNeedSaveColor
+                ColorThemeStore.isNeedSaveColor
                   ? "rgba(255, 255, 255, 0.2)"
                   : "rgba(255, 255, 255, 0.8)"
               }
@@ -199,7 +199,7 @@ const ThemeControls = observer(() => {
               onChange={(e) => {
                 setCenterColor(e.target.value);
               }}
-              placeholder={`${colorTheme.palette.from}`}
+              placeholder={`${ColorThemeStore.palette.from}`}
             />
 
             <StyledInput
@@ -208,7 +208,7 @@ const ThemeControls = observer(() => {
               onChange={(e) => {
                 setOutsideColor(e.target.value);
               }}
-              placeholder={`${colorTheme.palette.to}`}
+              placeholder={`${ColorThemeStore.palette.to}`}
             />
           </StyledInputsWrapper>
 

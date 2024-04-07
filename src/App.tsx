@@ -7,7 +7,7 @@ import AccountPage from "./Components/AccountPage/AccountPage";
 import NotFoundPage from "./Components/NotFoundPage";
 import { checkSizeLocalStorage } from "./scripts/storageWorker/checkSizeLocalStorage";
 import { observer } from "mobx-react-lite";
-import colorTheme, { PaletteType } from "./store/colorTheme";
+import { PaletteType, ColorThemeStore } from "./store/colorTheme";
 import { LSGetPalette } from "./scripts/storageWorker/LSPalette";
 import user from "./store/user";
 import { logError } from "./scripts/errorLog";
@@ -64,16 +64,19 @@ const App = observer(() => {
     window.addEventListener("resize", handleResize);
     checkSizeLocalStorage();
 
-    colorTheme.setIsNeedSaveColor(!!LSGetPalette());
-    colorTheme.isNeedSaveColor
-      ? colorTheme.setPalette(LSGetPalette())
-      : colorTheme.generateColor();
+    ColorThemeStore.setIsNeedSaveColor(!!LSGetPalette());
+    ColorThemeStore.isNeedSaveColor
+      ? ColorThemeStore.setPalette(LSGetPalette())
+      : ColorThemeStore.generateColor();
 
     return () => window.removeEventListener("resize", handleResize);
   }, [handleResize, authMe]);
 
   return (
-    <StyledApp from={colorTheme.palette.from} to={colorTheme.palette.to}>
+    <StyledApp
+      from={ColorThemeStore.palette.from}
+      to={ColorThemeStore.palette.to}
+    >
       <Routes>
         <Route path='/' element={<Main date={date} setDate={setDate} />} />
         <Route path='/account' element={<AccountPage />} />

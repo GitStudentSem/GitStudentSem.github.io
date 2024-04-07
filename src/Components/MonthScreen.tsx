@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import DayMonth from "./DayMonth";
 import { useSwipeable } from "react-swipeable";
-import { TasksFromDBType } from "./Main";
 
 const StyledWrapper = styled.div`
   display: grid;
@@ -14,15 +13,8 @@ const StyledWrapper = styled.div`
 interface IMonthScreenProps {
   date: Date;
   setDate: (date: Date) => void;
-  setIsMonth: (isMonth: boolean) => void;
-  tasksFromDB: TasksFromDBType[];
 }
-const MonthScreen = ({
-  date,
-  setIsMonth,
-  setDate,
-  tasksFromDB,
-}: IMonthScreenProps) => {
+const MonthScreen = ({ date, setDate }: IMonthScreenProps) => {
   //* при обновлении date компонент будет перерисован
   //* currentMonth nextMont daysInMonth будут рассчитаны заново
   const currentMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -60,19 +52,10 @@ const MonthScreen = ({
             )
           }
           setDate={setDate}
-          setIsMonth={setIsMonth}
-          tasksFromDB={tasksFromDB}
         />
       ))}
-      <DayMonth
-        date='other'
-        startColumn={35 - daysInMonth}
-        setDate={setDate}
-        setIsMonth={setIsMonth}
-        tasksFromDB={tasksFromDB}
-      />
+      <DayMonth date='other' startColumn={35 - daysInMonth} setDate={setDate} />
     </StyledWrapper>
   );
 };
-
 export default MonthScreen;

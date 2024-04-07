@@ -1,4 +1,4 @@
-import { ITask } from "../../Components/Main";
+import { ITask } from "../../store/tasks";
 import { transformDateToString } from "../transformDateToString";
 
 const nameTasks = (date: Date | "other") =>
