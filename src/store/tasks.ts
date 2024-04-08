@@ -1,6 +1,8 @@
 import { makeAutoObservable } from "mobx";
 import axios from "../axios";
 import { logError } from "../scripts/errorLog";
+import { transformDateToString } from "../scripts/transformDateToString";
+import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 
 export type ITask = {
   text: string;
@@ -8,34 +10,43 @@ export type ITask = {
   id: string;
 };
 
-export type TasksFromDBType = {
-  dateKey: Date | "other";
-  tasks: ITask[];
+// type TasksType = { text: string; isImportant: boolean; id: string };
+// Record<string, TasksType[]>;
+type TasksType = {
+  [key in string]: ITask[];
 };
 
 class Tasks {
-  tasksFromDB: TasksFromDBType[];
+  tasksFromDB: TasksType;
 
   constructor() {
-    this.tasksFromDB = [];
+    this.tasksFromDB = {};
 
     makeAutoObservable(this);
   }
 
   async setTasksfromDB() {
     try {
-      const { data } = await axios.get("/tasks/all");
-      const selectedFields: TasksFromDBType[] = [];
-      for (const dateKey in data) {
-        selectedFields.push({
-          dateKey: dateKey !== "other" ? new Date(dateKey) : "other",
-          tasks: data[dateKey],
-        });
-      }
-      this.tasksFromDB = selectedFields;
+      const { data }: { data: TasksType } = await axios.get("/tasks/all");
+
+      this.tasksFromDB = data;
     } catch (error) {
       logError(error);
     }
+  }
+
+  getTasksOnDay(date: Date | "other"): ITask[] {
+    const dateKey = transformDateToString(date);
+
+    if (Object.keys(this.tasksFromDB).length !== 0) {
+      return this.tasksFromDB[dateKey] || [];
+    }
+    return getStorageTasksList(date);
+  }
+
+  setTasksOnDay(date: Date | "other", task: ITask[]) {
+    const dateKey = transformDateToString(date);
+    this.tasksFromDB[dateKey] = task;
   }
 }
 

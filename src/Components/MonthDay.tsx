@@ -1,13 +1,10 @@
-import { useCallback, useEffect } from "react";
-import { useState } from "react";
 import { FaRegCalendar } from "react-icons/fa";
 import { MdOutlineWorkOutline } from "react-icons/md";
 import styled from "styled-components";
-import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { observer } from "mobx-react-lite";
-import { TasksStore } from "../store/tasks";
 import { ScreenStore } from "../store/screen";
+import { TasksStore } from "../store/tasks";
 
 type IStyledDay = {
   $isToday: boolean;
@@ -54,31 +51,8 @@ interface IDayMonthProps {
   date: Date | "other";
   startColumn?: number;
 }
-const DayMonth = observer(({ date, startColumn }: IDayMonthProps) => {
-  const [countTasksOnDay, setCountTasksOnDay] = useState(0);
-  const { tasksFromDB } = TasksStore;
 
-  const getTasksOnDay = useCallback(() => {
-    const currentTasks = tasksFromDB.find((day) => {
-      if (day.dateKey === "other") {
-        return day.dateKey === date;
-      }
-      return transformDateToString(day.dateKey) === transformDateToString(date);
-    });
-
-    if (currentTasks) {
-      setCountTasksOnDay(currentTasks.tasks.length);
-    }
-  }, [date, tasksFromDB]);
-
-  useEffect(() => {
-    if (tasksFromDB.length) {
-      getTasksOnDay();
-    } else {
-      setCountTasksOnDay(getStorageTasksList(date).length);
-    }
-  }, [date, getTasksOnDay, tasksFromDB]);
-
+export const MonthDay = observer(({ date, startColumn }: IDayMonthProps) => {
   return (
     <StyledDay
       $startColumn={startColumn || 0}
@@ -100,10 +74,10 @@ const DayMonth = observer(({ date, startColumn }: IDayMonthProps) => {
       <IconWrapper>
         <MdOutlineWorkOutline size={35} />
 
-        <StyledCountTasks>{countTasksOnDay}</StyledCountTasks>
+        <StyledCountTasks>
+          {TasksStore.getTasksOnDay(date).length}
+        </StyledCountTasks>
       </IconWrapper>
     </StyledDay>
   );
 });
-
-export default DayMonth;

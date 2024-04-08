@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import DayMonth from "./DayMonth";
 import { useSwipeable } from "react-swipeable";
 import { ScreenStore } from "../store/screen";
 import { observer } from "mobx-react-lite";
+import { Day } from "./Day";
 
 const StyledWrapper = styled.div`
   display: grid;
@@ -57,7 +57,7 @@ const MonthScreen = observer(() => {
   return (
     <StyledWrapper {...swipeDate}>
       {[...Array(daysInMonth)].map((_day, index) => (
-        <DayMonth
+        <Day
           key={`${currentMonth.getDate()}_${index}`}
           date={
             new Date(
@@ -68,7 +68,7 @@ const MonthScreen = observer(() => {
           }
         />
       ))}
-      <DayMonth date='other' startColumn={35 - daysInMonth} />
+      <Day date='other' startColumn={35 - daysInMonth} />
     </StyledWrapper>
   );
 });

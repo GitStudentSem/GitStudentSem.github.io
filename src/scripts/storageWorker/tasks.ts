@@ -11,6 +11,6 @@ export const setStorageTasksList = (list: ITask[], date: Date | "other") => {
   }
 };
 
-export const getStorageTasksList = (date: Date | "other") => {
+export const getStorageTasksList = (date: Date | "other"): ITask[] => {
   return JSON.parse(localStorage.getItem(nameTasks(date)) || "[]");
 };

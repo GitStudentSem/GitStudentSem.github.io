@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import Day from "./Day.js";
 import { screenSize } from "../scripts/screens.js";
 import { useSwipeable } from "react-swipeable";
 import { ScreenStore } from "../store/screen.js";
 import { observer } from "mobx-react-lite";
+import { Day } from "./Day.js";
 
 const StyledWrapper = styled.div`
   display: grid;

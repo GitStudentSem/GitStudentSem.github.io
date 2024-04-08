@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import TaskItem from "./TaskItem";
-import { ITask } from "../store/tasks";
+import { TasksStore } from "../store/tasks";
+import { observer } from "mobx-react-lite";
 
 const StyledTasksList = styled.ul`
   list-style-type: none;
@@ -10,26 +11,22 @@ const StyledTasksList = styled.ul`
 
 interface ITasksListProps {
   date: Date | "other";
-  tasksOnDay: ITask[];
-  setTasksOnDay: (tasks: ITask[]) => void;
 }
-const TasksList = ({ tasksOnDay, setTasksOnDay, date }: ITasksListProps) => {
+const TasksList = observer(({ date }: ITasksListProps) => {
   return (
     <StyledTasksList>
-      {tasksOnDay.map((taskItem, index) => {
+      {TasksStore.getTasksOnDay(date).map((taskItem, index) => {
         return (
           <TaskItem
             key={`${taskItem.text}_${index}`}
             taskItem={taskItem}
             index={index}
-            tasksOnDay={tasksOnDay}
-            setTasksOnDay={setTasksOnDay}
             date={date}
           />
         );
       })}
     </StyledTasksList>
   );
-};
+});
 
 export default TasksList;
