@@ -3,6 +3,7 @@ import axios from "../axios";
 import { logError } from "../scripts/errorLog";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { getStorageTasksList } from "../scripts/storageWorker/tasks";
+import { UserStore } from "./user";
 
 export type ITask = {
   text: string;
@@ -38,7 +39,7 @@ class Tasks {
   getTasksOnDay(date: Date | "other"): ITask[] {
     const dateKey = transformDateToString(date);
 
-    if (Object.keys(this.tasksFromDB).length !== 0) {
+    if (UserStore.isAuth) {
       return this.tasksFromDB[dateKey] || [];
     }
     return getStorageTasksList(date);
