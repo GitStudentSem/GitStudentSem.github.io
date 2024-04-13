@@ -1,30 +1,24 @@
-# React + TypeScript + Vite
+Деплой: https://dev.to/rashidshamloo/deploying-vite-react-app-to-github-pages-35hf
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+1. Установите gh-pagesпакет ( ctrl+~чтобы открыть терминал в VS Code)
+```sh 
+npm install gh-pages --save-dev
 ```
+2. В package.jsonфайле добавьте эти строки перед"build": "vite build",
+```sh
+"predeploy": "npm run build",
+"deploy": "gh-pages -d dist",
+```
+3. В vite.config.jsфайле добавьте эту строку передplugins: [react()],
+```json
+base: "/YOUR_REPOSITORY_NAME",
+```
+Измените YOUR_REPOSITORY_NAMEимя вашего репозитория GitHub.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+4. В типе терминала
+```sh
+npm run deploy
+```
+🎉 Теперь у вас есть gh-pagesветка в вашем репозитории и ваше приложение развернуто (вы можете проверить это в разделе Settings -> Pages)
+
+P.S. Чтобы обновить развертывание приложения, просто запустите npm run deployкоманду еще раз.
