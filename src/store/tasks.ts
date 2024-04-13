@@ -1,54 +1,49 @@
 import { makeAutoObservable } from "mobx";
-import axios from "../axios";
-import { logError } from "../scripts/errorLog";
 import { transformDateToString } from "../scripts/transformDateToString";
 import { getStorageTasksList } from "../scripts/storageWorker/tasks";
 import { UserStore } from "./user";
+import { makeFetch } from "../scripts/makeFetch";
 
 export type ITask = {
-  text: string;
-  isImportant: boolean;
-  id: string;
+	text: string;
+	isImportant: boolean;
+	id: string;
 };
 
 // type TasksType = { text: string; isImportant: boolean; id: string };
 // Record<string, TasksType[]>;
-type TasksType = {
-  [key in string]: ITask[];
+export type TasksType = {
+	[key in string]: ITask[];
 };
 
 class Tasks {
-  tasksFromDB: TasksType;
+	tasksFromDB: TasksType;
 
-  constructor() {
-    this.tasksFromDB = {};
+	constructor() {
+		this.tasksFromDB = {};
 
-    makeAutoObservable(this);
-  }
+		makeAutoObservable(this);
+	}
 
-  async setTasksfromDB() {
-    try {
-      const { data }: { data: TasksType } = await axios.get("/tasks/all");
+	async setTasksfromDB() {
+		makeFetch.get("/tasks/all").then((data: TasksType) => {
+			this.tasksFromDB = data;
+		});
+	}
 
-      this.tasksFromDB = data;
-    } catch (error) {
-      logError(error);
-    }
-  }
+	getTasksOnDay(date: Date | "other"): ITask[] {
+		const dateKey = transformDateToString(date);
 
-  getTasksOnDay(date: Date | "other"): ITask[] {
-    const dateKey = transformDateToString(date);
+		if (UserStore.isAuth) {
+			return this.tasksFromDB[dateKey] || [];
+		}
+		return getStorageTasksList(date);
+	}
 
-    if (UserStore.isAuth) {
-      return this.tasksFromDB[dateKey] || [];
-    }
-    return getStorageTasksList(date);
-  }
-
-  setTasksOnDay(date: Date | "other", task: ITask[]) {
-    const dateKey = transformDateToString(date);
-    this.tasksFromDB[dateKey] = task;
-  }
+	setTasksOnDay(date: Date | "other", task: ITask[]) {
+		const dateKey = transformDateToString(date);
+		this.tasksFromDB[dateKey] = task;
+	}
 }
 
 export const TasksStore = new Tasks();

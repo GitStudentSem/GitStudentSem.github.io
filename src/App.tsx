@@ -10,8 +10,8 @@ import { observer } from "mobx-react-lite";
 import { PaletteType, ColorThemeStore } from "./store/colorTheme";
 import { LSGetPalette } from "./scripts/storageWorker/LSPalette";
 import { UserStore } from "./store/user";
-import { logError } from "./scripts/errorLog";
-import { TasksStore } from "./store/tasks";
+import { TasksStore, TasksType } from "./store/tasks";
+import { makeFetch } from "./scripts/makeFetch";
 
 const StyledApp = styled.div<PaletteType>`
   display: flex;
@@ -25,67 +25,56 @@ const StyledApp = styled.div<PaletteType>`
     ${(props) => props.to} 100%
   );
 `;
+export type UserGetMeInfoType = {
+	email: string;
+	fullName: string;
+	tasks: TasksType;
+	_id: string;
+};
 
 const App = observer(() => {
-  const handleResize = useCallback(() => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-  }, []);
+	const handleResize = useCallback(() => {
+		const vh = window.innerHeight * 0.01;
+		document.documentElement.style.setProperty("--vh", `${vh}px`);
+	}, []);
 
-  const authMe = useCallback(async () => {
-    try {
-      const token = window.localStorage.getItem("token");
-      if (!token) return;
+	const authMe = useCallback(async () => {
+		makeFetch.get("/auth/me").then((data: UserGetMeInfoType) => {
+			UserStore.login(data.fullName);
+			TasksStore.setTasksfromDB();
+		});
+	}, []);
 
-      const response = await fetch("http://localhost:3333/auth/me", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
+	useEffect(() => {
+		authMe();
 
-      if (!response.ok) {
-        return console.error(data.message);
-      }
+		checkSizeLocalStorage();
 
-      UserStore.login(data.fullName);
-      TasksStore.setTasksfromDB();
-    } catch (error) {
-      logError(error);
-    }
-  }, []);
+		ColorThemeStore.setIsNeedSaveColor(!!LSGetPalette());
+		ColorThemeStore.isNeedSaveColor
+			? ColorThemeStore.setPalette(LSGetPalette())
+			: ColorThemeStore.generateColor();
+	}, [authMe]);
 
-  useEffect(() => {
-    authMe();
+	useEffect(() => {
+		handleResize();
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, [handleResize]);
 
-    checkSizeLocalStorage();
-
-    ColorThemeStore.setIsNeedSaveColor(!!LSGetPalette());
-    ColorThemeStore.isNeedSaveColor
-      ? ColorThemeStore.setPalette(LSGetPalette())
-      : ColorThemeStore.generateColor();
-  }, [authMe]);
-
-  useEffect(() => {
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [handleResize]);
-
-  return (
-    <StyledApp
-      from={ColorThemeStore.palette.from}
-      to={ColorThemeStore.palette.to}
-    >
-      <Routes>
-        <Route path='/' element={<Main />} />
-        <Route path='/account' element={<AccountPage />} />
-        <Route path='*' element={<NotFoundPage />} />
-        {/* <Route path='/login' element={<Login />} /> */}
-      </Routes>
-    </StyledApp>
-  );
+	return (
+		<StyledApp
+			from={ColorThemeStore.palette.from}
+			to={ColorThemeStore.palette.to}
+		>
+			<Routes>
+				<Route path="/" element={<Main />} />
+				<Route path="/account" element={<AccountPage />} />
+				<Route path="*" element={<NotFoundPage />} />
+				{/* <Route path='/login' element={<Login />} /> */}
+			</Routes>
+		</StyledApp>
+	);
 });
 
 export default App;

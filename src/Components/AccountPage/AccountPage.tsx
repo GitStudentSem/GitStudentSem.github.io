@@ -2,12 +2,12 @@ import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoTodaySharp } from "react-icons/io5";
-import Register from "./Register";
+import { RegisterForm } from "./RegisterForm";
 import Versions from "./Versions";
 import Attention from "./Attention";
 import ThemeControls from "./ThemeControls";
 import ViewControl from "./ViewControl";
-import Login from "./Login";
+import { LoginForm } from "./LoginForm";
 import { UserStore } from "../../store/user";
 import { observer } from "mobx-react-lite";
 import { screenSize } from "../../scripts/screens";
@@ -94,58 +94,58 @@ const StyledHelloBlock = styled.p`
 // `;
 
 const AccountPage = observer(() => {
-  const [isRegisterForm, setIsRegisterForm] = useState(false);
-  const [isLoginForm, setIsLoginForm] = useState(true);
+	const [isRegisterForm, setIsRegisterForm] = useState(false);
+	const [isLoginForm, setIsLoginForm] = useState(true);
 
-  const logOut = () => {
-    window.localStorage.removeItem("token");
-    UserStore.logout();
-  };
+	const logOut = () => {
+		window.localStorage.removeItem("token");
+		UserStore.logout();
+	};
 
-  return (
-    <StyledAccountPage>
-      <StyledHeader>
-        <StyledButton disabled>
-          <Link to='/'>
-            <IoTodaySharp size={30} fill='rgba(255, 255, 255, 0.8)' />
-          </Link>
-        </StyledButton>
-      </StyledHeader>
+	return (
+		<StyledAccountPage>
+			<StyledHeader>
+				<StyledButton disabled>
+					<Link to="/">
+						<IoTodaySharp size={30} fill="rgba(255, 255, 255, 0.8)" />
+					</Link>
+				</StyledButton>
+			</StyledHeader>
 
-      <StyledMain>
-        <StyledFormsWrapper>
-          {UserStore.isAuth ? (
-            <StyledHelloWrapper>
-              <StyledHelloBlock>привет, {UserStore.name}</StyledHelloBlock>
-              <StyledButton onClick={logOut}>Выйти из аккаунта</StyledButton>
-            </StyledHelloWrapper>
-          ) : (
-            <>
-              {isRegisterForm && (
-                <Register
-                  setIsRegisterForm={setIsRegisterForm}
-                  setIsLoginForm={setIsLoginForm}
-                />
-              )}
-              {isLoginForm && (
-                <Login
-                  setIsRegisterForm={setIsRegisterForm}
-                  setIsLoginForm={setIsLoginForm}
-                />
-              )}
-            </>
-          )}
-        </StyledFormsWrapper>
+			<StyledMain>
+				<StyledFormsWrapper>
+					{UserStore.isAuth ? (
+						<StyledHelloWrapper>
+							<StyledHelloBlock>привет, {UserStore.name}</StyledHelloBlock>
+							<StyledButton onClick={logOut}>Выйти из аккаунта</StyledButton>
+						</StyledHelloWrapper>
+					) : (
+						<>
+							{isRegisterForm && (
+								<RegisterForm
+									setIsRegisterForm={setIsRegisterForm}
+									setIsLoginForm={setIsLoginForm}
+								/>
+							)}
+							{isLoginForm && (
+								<LoginForm
+									setIsRegisterForm={setIsRegisterForm}
+									setIsLoginForm={setIsLoginForm}
+								/>
+							)}
+						</>
+					)}
+				</StyledFormsWrapper>
 
-        <ThemeControls />
+				<ThemeControls />
 
-        <Versions />
+				<Versions />
 
-        <ViewControl setColorsTheme={() => {}} colorsTheme={() => {}} />
+				<ViewControl setColorsTheme={() => {}} colorsTheme={() => {}} />
 
-        <Attention />
-      </StyledMain>
-    </StyledAccountPage>
-  );
+				<Attention />
+			</StyledMain>
+		</StyledAccountPage>
+	);
 });
 export default AccountPage;
